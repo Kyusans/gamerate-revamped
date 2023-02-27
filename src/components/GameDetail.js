@@ -2,13 +2,25 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Button } from "react-bootstrap";
+import RateGame from "./RateGame";
+
 
 const GameDetail = () => {
 
     const [gameId, setGameId] = useState("");
     const [gameName, setGameName] = useState("No game selected");
     const [gameDescription, setGameDescription] = useState("");
-    const [gameRate, setGameRate] = useState(0);
+
+    // Modal
+    const [showRateModal, setShowRateModal] = useState(false);
+
+    const openRateModal = () =>{
+        setShowRateModal(true);
+    }
+
+    const closeRateModal =  () =>{
+        setShowRateModal(false);
+    }
 
     const navigateTo = useNavigate(); 
 
@@ -47,7 +59,6 @@ const GameDetail = () => {
                 setGameId(res.data.game_id)
                 setGameName(res.data.game_name);
                 setGameDescription(res.data.game_description);
-                setGameRate(res.data.game_rate);
             }
         })
 
@@ -58,12 +69,16 @@ const GameDetail = () => {
 
     return ( 
         <>
-            <Container className="text-center mt-3 text-white">
-                <h1>{gameName}</h1><br />
-                <p>{gameDescription}</p><br />
-                <h2>Ratings: {gameRate} Stars</h2> <br />
+            <Container className="mt-3 mr-auto">
                 <Button className="btn-danger" onClick={handleBack}>Back</Button>
             </Container>
+            <Container className="text-center mt-3">
+                <h1>{gameName}</h1><br />
+                <p>{gameDescription}</p><br />
+                <Button className="btn-success button-large" onClick={openRateModal}>Rate Game</Button>
+            </Container>
+
+            <RateGame show={showRateModal} onHide={closeRateModal} gameId={gameId} />
             
         </>
      );

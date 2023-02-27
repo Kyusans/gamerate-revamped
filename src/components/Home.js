@@ -20,7 +20,7 @@ const Home = () => {
                 
             </Container>
 
-            <Container className="text-white">    
+            <Container>    
                 <hr />           
                 {isCardView ? <CardView /> : <TableView />}
             </Container>

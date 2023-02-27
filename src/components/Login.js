@@ -7,7 +7,6 @@ import "./css/site.css";
 
 const Login = () => {
     const [schoolId, setSchoolId] = useState("");
-    const [password, setPassword] = useState("");
     const [showInvalid, setShowInvalid] = useState(false);
 
     //for alert
@@ -29,7 +28,6 @@ const Login = () => {
 
         const jsonData = {
             schoolId: schoolId,
-            password: password
         }
 
         const formData = new FormData();
@@ -45,6 +43,9 @@ const Login = () => {
 
         .then((res) => {
             if(res.data !== 0){
+                console.log(res.data)
+                sessionStorage.setItem("studId", res.data.stud_schoolId);
+                console.log(res.data.stud_schoolId)
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {navigateTo("/")}, 2000)
@@ -81,27 +82,13 @@ const Login = () => {
                                         onChange={(e) => setSchoolId(e.target.value)}
                                         required
                                     />
-                                </FloatingLabel>
-
-                                <Form.Group className="mt-2">
-                                    <FloatingLabel className="fatter-text centered-label" label="Password">
-                                        <Form.Control
-                                            className="form-control"
-                                            type="password"
-                                            placeholder="Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            required
-                                        />
-                                    </FloatingLabel>
-
                                     {
                                         showInvalid &&
                                         <Form.Text className="text-danger">
-                                            Wrong id or password
+                                            Wrong id 
                                         </Form.Text>
                                     }
-                                </Form.Group>
+                                </FloatingLabel>
                             </Form.Group>
 
                             <Button className="button-large mt-3 btn-lg big-height btn-success" onClick={login}><div className="text-small">Login</div></Button>

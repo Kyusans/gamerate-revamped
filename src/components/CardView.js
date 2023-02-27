@@ -40,7 +40,7 @@ const CardView = () => {
                        
                 {game.map((games, index) => (
                     <Col className="mb-5" key={index}>
-                        <Card bg="dark">
+                        <Card>
                             <Card.Header>
                                 <Card.Title>{games.game_name}</Card.Title>
                             </Card.Header>

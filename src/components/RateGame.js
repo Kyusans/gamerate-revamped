@@ -1,17 +1,71 @@
+import axios from "axios";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import Rating from "react-rating-stars-component";
+import AlertScript from "./AlertScript";
 import "./css/site.css"
 
 const RateGame = (props) => {
 
     const {show, onHide, gameId } = props;
     
-    const [rating, setRating] = useState(0);
+    const [star, setStar] = useState(0);
+
+    //for alert
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertVariant, setAlertVariant] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+
+
+    function getAlert(variantAlert, messageAlert){
+        setShowAlert(true);
+        setAlertVariant(variantAlert);
+        setAlertMessage(messageAlert);
+    }
 
     const handleRating = (value) => {
-      setRating(value);
+      setStar(value);
     };
+
+    const addStar = () =>{
+        const url = "http://localhost/gamerate/games.php";
+
+        const schoolId = sessionStorage.getItem("schoolId");
+
+        const jsonData = {
+            gameId: gameId,
+            schoolId: schoolId,
+            stars: star
+        }
+        console.log("json data: " + JSON.stringify(jsonData))
+
+        const formData = new FormData();
+        formData.append("operation", "addStar");
+        formData.append("json", JSON.stringify(jsonData));
+
+        
+
+        axios({
+            url: url,
+            data: formData,
+            method:"post"
+        })
+
+        .then((res) =>{
+            if(res.data === 1){
+                getAlert("success", `You rated ${star} stars`)
+                setTimeout(() => {
+                    onHide();
+                }, 1250);
+            }else{
+                console.log(res.data)
+            }
+        })
+
+        .catch((err) =>{
+            getAlert("danger", "There was an unexpected error: " + err);
+        })
+    }
     return ( 
         <>
             <Modal show={show} onHide={onHide}>
@@ -21,15 +75,16 @@ const RateGame = (props) => {
                     </Modal.Title>
                 </Modal.Header>
 
-                <Modal.Body>
+                <Modal.Body>               
                     <div className="text-center">
+                        <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
                         <div className="rating-container">
                             <Rating
-                            count={5}
-                            size={50}
-                            activeColor="#ffd700"
-                            value={rating}
-                            onChange={handleRating}
+                                count={5}
+                                size={50}
+                                activeColor="#ffd700"
+                                value={star}
+                                onChange={handleRating}
                             />
                         </div>
                         
@@ -37,8 +92,8 @@ const RateGame = (props) => {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button className="btn-danger">Close</Button>
-                    <Button className="" onClick={() => alert(`You rated ${rating} stars!`)}>Submit</Button>
+                    <Button className="btn-danger" onClick={() => onHide()}>Close</Button>
+                    <Button className="btn-success" onClick={addStar}>Submit</Button>
                 </Modal.Footer>
             </Modal>
         </>

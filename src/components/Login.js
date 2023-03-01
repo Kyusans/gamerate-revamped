@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button, Container, FloatingLabel, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AlertScript from './AlertScript';
@@ -15,6 +15,10 @@ const Login = () => {
     const [alertMessage, setAlertMessage] = useState("");
 
     const navigateTo = useNavigate();
+
+    useEffect(() =>{
+        sessionStorage.setItem("schoolId", "");
+    },[])
 
 
     function getAlert(variantAlert, messageAlert){
@@ -43,9 +47,7 @@ const Login = () => {
 
         .then((res) => {
             if(res.data !== 0){
-                console.log(res.data)
-                sessionStorage.setItem("studId", res.data.stud_schoolId);
-                console.log(res.data.stud_schoolId)
+                sessionStorage.setItem("schoolId", res.data.stud_schoolId);
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {navigateTo("/")}, 2000)

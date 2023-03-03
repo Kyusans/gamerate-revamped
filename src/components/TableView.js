@@ -39,10 +39,10 @@ const TableView = () => {
 
     return ( 
         <>
-            <Table responsive striped bordered className="text-center" variant="dark">
+            <Table responsive striped bordered className="text-center" variant="light">
                 <thead>
                     <tr>
-                        <th>Game Title</th>
+                        <th className="green-header text-white">Game Title</th>
                     </tr>
                 </thead>
 

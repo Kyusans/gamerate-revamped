@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Card, Button, Col, Container, } from "react-bootstrap";
+import { Card, Button, Col, Container, Row, } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
+import "./css/site.css";
 const CardView = () => {
     const [game, setGame] = useState([]);
     const navigateTo = useNavigate();
@@ -37,25 +37,24 @@ const CardView = () => {
     return ( 
         <>
             <Container className="text-center">
-                       
-                {game.map((games, index) => (
-                    <Col className="mb-5" key={index}>
-                        <Card>
-                            <Card.Header>
-                                <Card.Title>{games.game_name}</Card.Title>
-                            </Card.Header>
+                <Row>
+                    {game.map((games, index) => (
+                        <Col className="justify-content-center" key={index}>
+                            <Card className="small-card mb-5">
+                                <Card.Img className="mx-auto" variant="top" src={process.env.PUBLIC_URL + "/images/gameIcon/" + games.game_icon}></Card.Img>
 
-                            <Card.Body>
-                                <Card.Text>{games.game_description}</Card.Text>
-                            </Card.Body>
+                                <Card.Body>
+                                    <Card.Title><b>{games.game_name}</b></Card.Title>
+                                </Card.Body>
 
-                            <Card.Footer>
-                                <Button className="btn-succes" size="lg" onClick={() => handleSelectedGame(games.game_id)}>See more</Button>
-                            </Card.Footer>
-                        </Card>
-                    </Col>
-                ))}
-              
+                                <Card.Footer>
+                                    <Button className="btn-succes" onClick={() => handleSelectedGame(games.game_id)}>See more</Button>
+                                </Card.Footer>
+                            </Card>
+                        </Col>
+                        
+                    ))}
+                </Row> 
             </Container>
         </>
     );

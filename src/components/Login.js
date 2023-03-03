@@ -64,15 +64,14 @@ const Login = () => {
     
     return ( 
         <>
-            <Container className="text-center">
-                <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
-            </Container>
-
             <Container fluid="md" className="centered">
                 <Card className="card-thin">
                     <Card.Body className="card-body">
-                        
                         <h2 className="text-center mt-4">Login</h2>
+                        <Container className="text-center">
+                            <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
+                        </Container>
+                        
                         <Form className="text-center">
                             <Form.Group>
                                 <FloatingLabel className="fatter-text mt-4 centered-label" label="School Id">

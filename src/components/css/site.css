@@ -75,3 +75,9 @@
     margin: 0 auto;
     display: inline-block;
 }
+
+.small-card {
+    max-width: 500px;
+    max-height: 750px;
+
+}

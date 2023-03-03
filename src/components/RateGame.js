@@ -43,8 +43,6 @@ const RateGame = (props) => {
         formData.append("operation", "addStar");
         formData.append("json", JSON.stringify(jsonData));
 
-        
-
         axios({
             url: url,
             data: formData,
@@ -52,13 +50,13 @@ const RateGame = (props) => {
         })
 
         .then((res) =>{
-            if(res.data === 1){
+            if(res.data !== 0){
                 getAlert("success", `You rated ${star} stars`)
                 setTimeout(() => {
                     onHide();
                 }, 1250);
             }else{
-                console.log(res.data)
+                getAlert("danger", "There was an unexpected error");
             }
         })
 
@@ -66,6 +64,8 @@ const RateGame = (props) => {
             getAlert("danger", "There was an unexpected error: " + err);
         })
     }
+
+
     return ( 
         <>
             <Modal show={show} onHide={onHide}>

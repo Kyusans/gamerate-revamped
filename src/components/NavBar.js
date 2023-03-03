@@ -14,7 +14,7 @@ function NavBar() {
   },[])
   
   const handleIsLoggined = () =>{
-    if(sessionStorage.getItem("schoolId") === ""){
+    if(sessionStorage.getItem("schoolId") === null || sessionStorage.getItem("schoolId") === ""){
       setIsLoggedIn(false);
     }else{
       setIsLoggedIn(true);

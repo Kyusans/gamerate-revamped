@@ -1,49 +1,48 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Alert, Container, Table } from "react-bootstrap";
 
 const PartialResult = () => {
-  const [game, setGame] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+    const [game, setGame] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-  const getGames = async () => {
-    const url = "http://localhost/gamerate/games.php";
+    const getGames = async () => {
+        const url = "http://localhost/gamerate/games.php";
 
-    const formData = new FormData();
+        const formData = new FormData();
 
-    formData.append("operation", "getGameResult");
+        formData.append("operation", "getGameResult");
 
-    try {
-      const res = await axios({
-        url: url,
-        data: formData,
-        method: "post",
-        timeout: 10000,
-      });
+        try {
+        const res = await axios({
+            url: url,
+            data: formData,
+            method: "post",
+            timeout: 10000,
+        });
 
-      if (res.data !== 0) {
-        setGame(res.data);
-        setIsLoading(false);
-        console.log("getgames called")
-      } else {
-        console.log(res.data);
-      }
-    } catch (err) {
-      console.log("There was an unexpected error: " + err);
-    }
-  };
+        if (res.data !== 0) {
+            setGame(res.data);
+            setIsLoading(false);
+        } else {
+            console.log(res.data);
+        }
+        } catch (err) {
+        console.log("There was an unexpected error: " + err);
+        }
+    };
 
-  useEffect(() => {
-    const intervalId = setInterval(getGames, 5000);
+    useEffect(() => {
+        const intervalId = setInterval(getGames, 5000);
 
-    return () => clearInterval(intervalId); 
-  }, []);
+        return () => clearInterval(intervalId); 
+    }, []);
 
   return (
     <>
       <Container>
         {isLoading ? (
-          <p>Getting data...</p>
+          <Alert variant="success">Getting data...</Alert>
         ) : (
           <Table
             bordered

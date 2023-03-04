@@ -28,21 +28,14 @@ const RateGame = (props) => {
     };
 
     const addStar = () =>{
-        const url = "http://localhost/gamerate/games.php";
+        const url =sessionStorage.getItem("url") + "games.php";
 
         const schoolId = sessionStorage.getItem("schoolId");
 
-        const jsonData = {
-            gameId: gameId,
-            schoolId: schoolId,
-            stars: star
-        }
-        console.log("json data: " + JSON.stringify(jsonData))
-
+        const jsonData = {gameId: gameId, schoolId: schoolId, stars: star}
         const formData = new FormData();
         formData.append("operation", "addStar");
         formData.append("json", JSON.stringify(jsonData));
-
         axios({
             url: url,
             data: formData,
@@ -50,7 +43,10 @@ const RateGame = (props) => {
         })
 
         .then((res) =>{
-            if(res.data !== 0){
+            var data = res.data;
+            if(data === 3){
+                getAlert("danger", "You have already rated this game.");
+            }else if(res.data === 1){
                 getAlert("success", `You rated ${star} stars`)
                 setTimeout(() => {
                     onHide();
@@ -64,7 +60,6 @@ const RateGame = (props) => {
             getAlert("danger", "There was an unexpected error: " + err);
         })
     }
-
 
     return ( 
         <>

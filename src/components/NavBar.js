@@ -23,7 +23,7 @@ function NavBar() {
 
   return (
     <Navbar className="nav-background" expand="lg" text="light">
-      <Navbar.Brand href="/">IT Day</Navbar.Brand>
+      <Navbar.Brand href="/">IT Days 2023</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">

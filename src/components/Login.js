@@ -28,7 +28,7 @@ const Login = () => {
     }
 
     const login = () => {
-        const url = "http://localhost/gamerate/students.php";
+        const url = sessionStorage.getItem("url") + "students.php";
 
         const jsonData = {
             schoolId: schoolId,

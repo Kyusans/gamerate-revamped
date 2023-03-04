@@ -9,10 +9,10 @@ const CardView = () => {
 
     useEffect(() =>{
         getGames();
-    }, [game])
+    }, [])
 
     const getGames = () =>{
-        const url = "http://localhost/gamerate/games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
 
         const formData = new FormData();
 
@@ -22,9 +22,7 @@ const CardView = () => {
             url: url,
             data: formData,
             method: "post"
-        })
-
-        .then((res) =>{
+        }).then((res) =>{
             if(res.data !== 0){
                 setGame(res.data);
             }
@@ -38,22 +36,25 @@ const CardView = () => {
         <>
             <Container className="text-center">
                 <Row>
-                    {game.map((games, index) => (
-                        <Col className="justify-content-center" key={index}>
-                            <Card className="small-card mb-5">
-                                <Card.Img className="mx-auto" variant="top" src={process.env.PUBLIC_URL + "/images/gameIcon/" + games.game_icon}></Card.Img>
+                    {   Array.isArray(game) ?
+                            game.map((games, index) => (
+                                <Col className="justify-content-center" key={index}>
+                                    <Card className="small-card mb-5">
+                                        <Card.Img className="mx-auto icon-image" variant="top" src={process.env.PUBLIC_URL + "/images/gameIcon/" + games.game_icon}></Card.Img>
 
-                                <Card.Body>
-                                    <Card.Title><b>{games.game_name}</b></Card.Title>
-                                </Card.Body>
+                                        <Card.Body>
+                                            <Card.Title><b>{games.game_name}</b></Card.Title>
+                                        </Card.Body>
 
-                                <Card.Footer>
-                                    <Button className="btn-succes" onClick={() => handleSelectedGame(games.game_id)}>See more</Button>
-                                </Card.Footer>
-                            </Card>
-                        </Col>
-                        
-                    ))}
+                                        <Card.Footer>
+                                            <Button className="btn-succes" onClick={() => handleSelectedGame(games.game_id)}>See more</Button>
+                                        </Card.Footer>
+                                    </Card>
+                                </Col>
+                            ))
+                        :
+                            alert("ambot")
+                    }
                 </Row> 
             </Container>
         </>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 
 import CardView from "./CardView";
@@ -13,6 +13,11 @@ const Home = () => {
         isCardView ? setIsCardView(false) : setIsCardView(true);
     }
 
+    useEffect(()=> {
+        if(sessionStorage.getItem("url") === null){
+            sessionStorage.setItem("url", "http://localhost/gamerate/");
+        }
+    },[])
     return ( 
         <>
 

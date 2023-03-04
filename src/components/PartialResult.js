@@ -7,7 +7,7 @@ const PartialResult = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const getGames = async () => {
-        const url = "http://localhost/gamerate/games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
 
         const formData = new FormData();
 
@@ -18,7 +18,6 @@ const PartialResult = () => {
             url: url,
             data: formData,
             method: "post",
-            timeout: 10000,
         });
 
         if (res.data !== 0) {
@@ -44,17 +43,11 @@ const PartialResult = () => {
         {isLoading ? (
           <Alert variant="success">Getting data...</Alert>
         ) : (
-          <Table
-            bordered
-            striped
-            responsive
-            variant="light"
-            className="mt-3 text-center"
-          >
+          <Table bordered striped responsive variant="light" className="mt-3 text-center">
             <thead>
               <tr>
                 <th className="green-header text-white">Rank</th>
-                <th className="green-header text-white">Letter</th>
+                <th className="green-header text-white">Game</th>
                 <th className="green-header text-white">Stars</th>
               </tr>
             </thead>
@@ -63,7 +56,7 @@ const PartialResult = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{games.game_letter}</td>
-                  <td>{games.game_stars}</td>
+                  <td>{games.totalStars}</td>
                 </tr>
               ))}
             </tbody>

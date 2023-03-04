@@ -79,5 +79,9 @@
 .small-card {
     max-width: 500px;
     max-height: 750px;
+}
 
+.icon-image {
+    width: 300px;
+    height: 200px;
 }

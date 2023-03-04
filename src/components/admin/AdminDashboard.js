@@ -7,7 +7,7 @@ const AdminDashboard = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const getGames = async () => {
-        const url = "http://localhost/gamerate/games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
 
         const formData = new FormData();
 

@@ -14,7 +14,7 @@ const TableView = () => {
     }, [game])
 
     const getGames = () =>{
-        const url = "http://localhost/gamerate/games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
 
         const formData = new FormData();
 

@@ -25,7 +25,7 @@ const AdminLogin = () => {
     const navigateTo = useNavigate();
 
     const login = () =>{
-        const url = "http://localhost/gamerate/admin.php";
+        const url = sessionStorage.getItem("url") + "admin.php";
 
         const jsonData = {
             adminId: adminId,

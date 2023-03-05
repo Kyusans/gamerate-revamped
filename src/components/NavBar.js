@@ -10,28 +10,27 @@ function NavBar() {
     const intervalId = setInterval(handleIsLoggined, 3000);
 
     return () => clearInterval(intervalId);
-
   },[])
   
   const handleIsLoggined = () =>{
-    if(sessionStorage.getItem("schoolId") === null || sessionStorage.getItem("schoolId") === ""){
-      setIsLoggedIn(false);
-    }else{
+    if(sessionStorage.getItem("isLoggedIn") === "1"){
       setIsLoggedIn(true);
+    }else{
+      setIsLoggedIn(false);
     }
   }
 
   return (
     <Navbar className="nav-background" expand="lg" text="light">
-      <Navbar.Brand href="/">IT Days 2023</Navbar.Brand>
+      <Navbar.Brand href="." className="brand">IT Days 2023</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="/about">About</Nav.Link>
+          <Nav.Link href=".">Home</Nav.Link>
+          <Nav.Link href="./about">About</Nav.Link>
         </Nav>
         <Nav className="ms-auto">
-          <Nav.Link href={"/login"}>
+          <Nav.Link href={"./login"}>
             {isLoggedIn ? "Signout" : "Login"}
           </Nav.Link>
         </Nav>

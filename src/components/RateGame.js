@@ -8,7 +8,6 @@ import "./css/site.css"
 const RateGame = (props) => {
 
     const {show, onHide, gameId } = props;
-    
     const [star, setStar] = useState(0);
 
     //for alert
@@ -61,6 +60,24 @@ const RateGame = (props) => {
         })
     }
 
+    const checkStatus = async () =>{
+        const url = sessionStorage.getItem("url") + "games.php";
+        const formData = new FormData();
+        formData.append("operation", "getSettings");
+        try {
+            const res = await axios({url: url, data: formData, method: "post"});
+            const settings = res.data;
+            const status = settings.find((setting) => setting.set_key === "status");
+            if(status && status.set_value === "1"){
+                addStar();
+            }else{    
+                getAlert("danger", "Rating unavailable");
+            }
+        }catch(err) {
+            getAlert("danger","There was an unexpected error occured: ", err)
+        }
+    }
+
     return ( 
         <>
             <Modal show={show} onHide={onHide}>
@@ -88,7 +105,7 @@ const RateGame = (props) => {
 
                 <Modal.Footer>
                     <Button className="btn-danger" onClick={() => onHide()}>Close</Button>
-                    <Button className="btn-success" onClick={addStar}>Submit</Button>
+                    <Button className="btn-success" onClick={checkStatus}>Submit</Button>
                 </Modal.Footer>
             </Modal>
         </>

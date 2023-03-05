@@ -7,6 +7,9 @@ import About from './components/About';
 import GameDetail from './components/GameDetail';
 import AdminLogin from './components/admin/AdminLogin'
 import AdminDashboard from './components/admin/AdminDashboard';
+import AddNickName from './components/AddNickName';
+import ShoutoutForm from './components/ShoutoutForm';
+import Signup from './components/Signup';
 
 function App() {
   return (
@@ -14,7 +17,7 @@ function App() {
       <nav>
         <NavBar />
       </nav>
-      <Router>
+      <Router basename='/itdays'>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -22,6 +25,9 @@ function App() {
           <Route path="/game" element={<GameDetail />} />
           <Route path="/admin/login" element={<AdminLogin /> } />
           <Route path="/admin/dashboard" element={<AdminDashboard /> } />
+          <Route path="/shoutoutform" element={<ShoutoutForm />} />
+          <Route path="/nickname" element={<AddNickName />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Router>
     </>

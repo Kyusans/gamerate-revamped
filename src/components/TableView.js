@@ -11,7 +11,7 @@ const TableView = () => {
 
     useEffect(() =>{
         getGames();
-    }, [game])
+    }, [])
 
     const getGames = () =>{
         const url = sessionStorage.getItem("url") + "games.php";

@@ -32,9 +32,9 @@ const PartialResult = () => {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(getGames, 5000);
-
-        return () => clearInterval(intervalId); 
+      getGames();
+      const intervalId = setInterval(getGames, 5000);
+      return () => clearInterval(intervalId); 
     }, []);
 
   return (

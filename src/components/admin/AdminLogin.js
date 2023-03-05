@@ -45,7 +45,7 @@ const AdminLogin = () => {
 
         .then((res) => {
             if(res.data !== 0){
-                sessionStorage.setItem("schoolId", res.data.stud_schoolId);
+                sessionStorage.setItem("isAdminLoggined", "1");
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {navigateTo("/admin/dashboard")}, 2000)
@@ -69,7 +69,7 @@ const AdminLogin = () => {
                     <FloatingLabel className="fatter-text mt-4 centered-label" label="Admin Id">
                         <Form.Control
                             className="form-control"
-                            type="text"
+                            type="password"
                             placeholder="Admin Id"
                             value={adminId}
                             onChange={(e) => setAdminId(e.target.value)}

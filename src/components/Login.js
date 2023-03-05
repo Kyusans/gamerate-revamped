@@ -17,9 +17,9 @@ const Login = () => {
     const navigateTo = useNavigate();
 
     useEffect(() =>{
-        sessionStorage.setItem("schoolId", "");
+        sessionStorage.setItem("isLoggedIn", "0")
+        sessionStorage.setItem("schoolId", null);
     },[])
-
 
     function getAlert(variantAlert, messageAlert){
         setShowAlert(true);
@@ -46,8 +46,15 @@ const Login = () => {
         })
 
         .then((res) => {
-            if(res.data !== 0){
+            if(res.data.stud_nickName === ""){
                 sessionStorage.setItem("schoolId", res.data.stud_schoolId);
+                getAlert("success", "Success!");
+                setShowInvalid(false);
+                setTimeout(() => {navigateTo("/nickname")}, 2000)
+            }else if(res.data !== 0){
+                sessionStorage.setItem("schoolId", res.data.stud_schoolId);
+                sessionStorage.setItem("nickName", res.data.stud_nickName);
+                sessionStorage.setItem("isLoggedIn", "1")
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {navigateTo("/")}, 2000)
@@ -81,18 +88,19 @@ const Login = () => {
                                         placeholder="School Id"
                                         value={schoolId}
                                         onChange={(e) => setSchoolId(e.target.value)}
-                                        required
                                     />
                                     {
                                         showInvalid &&
                                         <Form.Text className="text-danger">
-                                            Wrong id 
+                                            Invalid id 
                                         </Form.Text>
                                     }
                                 </FloatingLabel>
                             </Form.Group>
 
                             <Button className="button-large mt-3 btn-lg big-height btn-success" onClick={login}><div className="text-small">Login</div></Button>
+                            <hr />
+                            <p className="mt-3 text-center">Don't have an account?<button className="link-button" onClick={() => navigateTo("/signup")}>Sign Up</button> </p>
                         </Form>
                     </Card.Body>
                 </Card>

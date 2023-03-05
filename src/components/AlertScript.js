@@ -31,6 +31,6 @@ export default AlertScript;
 //     setShowAlert(true);
 //     setAlertVariant(variantAlert);
 //     setAlertMessage(messageAlert);
-//   }
+//  }
 
 // <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />

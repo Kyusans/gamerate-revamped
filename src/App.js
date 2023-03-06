@@ -10,6 +10,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import AddNickName from './components/AddNickName';
 import ShoutoutForm from './components/ShoutoutForm';
 import Signup from './components/Signup';
+import AdminSettings from './components/admin/AdminSettings';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/shoutoutform" element={<ShoutoutForm />} />
           <Route path="/nickname" element={<AddNickName />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/admin/dashboard/settings" element={<AdminSettings />} />
         </Routes>
       </Router>
     </>

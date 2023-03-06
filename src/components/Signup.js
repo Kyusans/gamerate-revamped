@@ -1,35 +1,34 @@
 import axios from "axios";
 import { useState } from "react";
-import { Button, Card, Container, Dropdown, FloatingLabel, Form } from "react-bootstrap";
+import { Button, Card, Container, FloatingLabel, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AlertScript from "./AlertScript";
 
 const Signup = () => {
-	  //for alert
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertVariant, setAlertVariant] = useState("");
-  const [alertMessage, setAlertMessage] = useState("");
 	const [schoolId, setSchoolId] = useState("");
+	const [fullName, setFullName] = useState("");
+	const [nickName, setNickName] = useState("");
+	const [course, setCourse] = useState("");
 	const [validated, setValidated] = useState(false);
+	//for alert
+	const [showAlert, setShowAlert] = useState(false);
+	const [alertVariant, setAlertVariant] = useState("");
+	const [alertMessage, setAlertMessage] = useState("");
 	const navigateTo = useNavigate();
 	const courseList = ['ABM', 'ABM-HT', 'BACOM', 'BECED', 'BEED', 'BSA', 'BSAR', 'BSBA-FM', 'BSBA-MM', 'BSCE', 'BSCPE', 'BSCRIM', 'BSED-EN', 'BSED-FIL', 'BSED-MATH', 'BSEE', 'BSHM', 'BSHRM', 'BSIT', 'BSMA', 'BSME', 'BSMLS', 'BSN', 'BSPHARMA', 'BSTM', 'CTEACH', 'ELEM', 'ETEEAP', 'GAS', 'GAS-CRI', 'GAS-EDU', 'GAS-IT', 'HS', 'HUMSS', 'MAEDA', 'MAEED', 'MASE', 'MATSS', 'MGM', 'MSCRIM', 'PHDEDAS', 'STEM', 'STEM-HEALTH', 'TVL', 'TVL-EIM', 'TVL-EPAS', 'TVL-HOSPITALITY', 'TVL-MACH', 'TVL-PROGRAMMING', 'TVL-SMAW', 'TVL-TOURISM'];
 
 	function getAlert(variantAlert, messageAlert){
-    setShowAlert(true);
-    setAlertVariant(variantAlert);
-    setAlertMessage(messageAlert);
+		setShowAlert(true);
+		setAlertVariant(variantAlert);
+		setAlertMessage(messageAlert);
  	}
 
 	const signup = () => {
 	const url = sessionStorage.getItem("url") + "students.php";
-
-	const jsonData = {
-		schoolId: schoolId,
-	}
-
+	const jsonData = {schoolId: schoolId, name: fullName, course: course, nickName: nickName}
 	const formData = new FormData();
 
-	formData.append("operation", "login");
+	formData.append("operation", "register");
 	formData.append("json", JSON.stringify(jsonData));
 
 	axios({
@@ -39,7 +38,11 @@ const Signup = () => {
 	})
 
 	.then((res) => {
-		if(res.data !== 0){
+		console.log("res ni signup: " + res.data)
+		if(res.data === -1){
+			getAlert("danger","The ID you have entered has already been registered in our system.")
+			setSchoolId("");
+		}else if(res.data !== 0){
 			getAlert("success", "Success!");
 			setTimeout(() => {navigateTo("/login")}, 2000)
 	}
@@ -55,11 +58,15 @@ const Signup = () => {
 			e.preventDefault();
 			e.stopPropagation();
 		}else{
-			alert("Signup");
+			signup();
 			e.preventDefault();
 			e.stopPropagation();
 		}
 		setValidated(true);
+	}
+	const handleCourseName = (e) =>{
+		setCourse(e.target.value);
+		console.log("course: ", e.target.value)
 	}
 	return ( 
 		<>
@@ -72,8 +79,20 @@ const Signup = () => {
 						</Container>
 						
 						<Form noValidate validated={validated} className="text-center" onSubmit={formValidation}>
+							<Form.Group className="mt-2 w-75 margin-auto">
+								<Form.Select aria-label="Default select example" onChange={handleCourseName} required defaultValue="" >
+									<option value="" disabled>Select course</option>
+									{courseList.map((item, index) =>(
+									<option value={item} key={index}>{item}</option>
+									))}
+								</Form.Select>
+								<Form.Control.Feedback type="invalid">
+										This field is required
+								</Form.Control.Feedback>
+							</Form.Group>
+
 							<Form.Group>
-								<FloatingLabel className="fatter-text mt-4 centered-label" label="School Id">
+								<FloatingLabel className="fatter-text mt-3 centered-label" label="School Id">
 									<Form.Control
 											className="form-control"
 											type="text"
@@ -87,24 +106,42 @@ const Signup = () => {
 									</Form.Control.Feedback>
 								</FloatingLabel>
 							</Form.Group>
-							<Form.Group controlId="formGroupDropdown">
-								<Form.Label>Choose a course:</Form.Label>
-								<Dropdown>
-									<Dropdown.Toggle variant="success" id="dropdown-basic">
-										Select a course
-									</Dropdown.Toggle>
-									<Dropdown.Menu>
-										{courseList.map((item, index) => (
-											<Dropdown.Item key={index} href={`#${item}`}>
-												{item}
-											</Dropdown.Item>
-										))}
-									</Dropdown.Menu>
-								</Dropdown>
+
+							<Form.Group>
+								<FloatingLabel className="fatter-text mt-3 centered-label" label="Full Name">
+									<Form.Control
+											className="form-control"
+											type="text"
+											placeholder="LAST NAME, FIRST NAME MIDDLE NAME"
+											value={fullName}
+											onChange={(e) => setFullName(e.target.value)}
+											required
+									/>
+									<Form.Control.Feedback type="invalid">
+										This field is required
+									</Form.Control.Feedback>
+								</FloatingLabel>
 							</Form.Group>
-								<Button type="submit" className="button-large mt-3 btn-lg big-height btn-success"><div className="text-small">Submit</div></Button>
-								<hr />
-								<p className="mt-3 text-center">Already have an account?<button className="link-button" onClick={() => navigateTo("/login")}>Login</button> </p>
+
+							<Form.Group>
+								<FloatingLabel className="fatter-text mt-3 centered-label" label="Nickname">
+									<Form.Control
+											className="form-control"
+											type="text"
+											placeholder="Nickname"
+											value={nickName}
+											onChange={(e) => setNickName(e.target.value)}
+											required
+									/>
+									<Form.Control.Feedback type="invalid">
+										This field is required
+									</Form.Control.Feedback>
+								</FloatingLabel>
+							</Form.Group>
+							
+							<Button type="submit" variant="outline-success" className="button-large mt-3 btn-lg big-height"><div className="text-small">Submit</div></Button>
+							<hr />
+							<p className="mt-3 text-center">Already have an account?<button className="link-button" onClick={() => navigateTo("/login")}>Login</button> </p>
 						</Form>
 					</Card.Body>
 					</Card>

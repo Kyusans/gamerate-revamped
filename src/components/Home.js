@@ -16,7 +16,7 @@ const Home = () => {
         isCardView ? setIsCardView(false) : setIsCardView(true);
     }
     url = "http://www.shareatext.com/itdays/api/";
-    // url = "http://localhost/itdays/api/";
+    url = "http://localhost/itdays/api/";
     sessionStorage.setItem("url", url);
 
     useEffect(()=> {
@@ -24,6 +24,7 @@ const Home = () => {
             sessionStorage.setItem("isLoggedIn", "0");
         }
     },[])
+
     return ( 
         
         <>
@@ -36,7 +37,7 @@ const Home = () => {
             <Container>
                 <div className="mb-3 d-flex justify-content-between align-items-center">
                     <h1>Shoutouts</h1>
-                    <Button onClick={() => navigateTo("/shoutoutform")}>Create Shoutout</Button>
+                    <Button variant="outline-success" onClick={() => navigateTo("/shoutoutform")}>Create Shoutout</Button>
                 </div>
                 <Shoutout />
                 <hr />
@@ -44,7 +45,7 @@ const Home = () => {
 
             <Container className="d-flex justify-content-between align-items-center">
                 <h1>Games</h1>
-                <Button onClick={handleChangeView}>Change View</Button>
+                <Button variant="outline-success" onClick={handleChangeView}>Change View</Button>
             </Container>
 
             <Container className="mt-3">          

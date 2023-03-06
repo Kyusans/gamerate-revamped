@@ -23,7 +23,7 @@ const ShoutoutForm = () => {
     const url = sessionStorage.getItem("url") + "shoutout.php";
 		const schoolId = sessionStorage.getItem("schoolId");
     const nickName = sessionStorage.getItem("nickName");
-		const jsonData = {shoutOut: shoutOut, schoolId : schoolId, nickName: nickName}
+		const jsonData = {shoutOut: shoutOut, nickName: nickName, schoolId : schoolId}
 		console.log(JSON.stringify(jsonData))
 		const formData = new FormData();
 		formData.append("json", JSON.stringify(jsonData));
@@ -53,7 +53,7 @@ const ShoutoutForm = () => {
       getAlert("danger", "You need to login first");
       setTimeout(() => {
         navigateTo("/login");
-      }, 2000);
+      }, 1000);
     }
   }
 
@@ -82,7 +82,7 @@ const ShoutoutForm = () => {
                   Please enter a message of no more than 700 characters.
                 </Form.Text>
               </Form.Group>
-              <Button className="button-large mt-3 btn-lg big-height btn-success" onClick={handleSubmit}>Submit</Button>
+              <Button className="button-large mt-3 btn-lg big-height" variant="outline-success" onClick={handleSubmit}>Submit</Button>
             </Form>
           </Card.Body>
         </Card>

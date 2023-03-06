@@ -5,35 +5,58 @@ import { Alert, Container, Table } from "react-bootstrap";
 const PartialResult = () => {
     const [game, setGame] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [reveal, setReveal] = useState(false);
 
     const getGames = async () => {
-        const url = sessionStorage.getItem("url") + "games.php";
+      const url = sessionStorage.getItem("url") + "games.php";
 
-        const formData = new FormData();
+      const formData = new FormData();
 
-        formData.append("operation", "getGameResult");
+      formData.append("operation", "getGameResult");
 
-        try {
-        const res = await axios({
-            url: url,
-            data: formData,
-            method: "post",
-        });
+      try {
+      const res = await axios({
+        url: url,
+        data: formData,
+        method: "post",
+      });
 
-        if (res.data !== 0) {
-            setGame(res.data);
-            setIsLoading(false);
-        } else {
-            console.log(res.data);
-        }
-        } catch (err) {
-        console.log("There was an unexpected error: " + err);
-        }
+      if(res.data !== 0) {
+        setGame(res.data);
+        setIsLoading(false);
+      }else{
+        console.log(res.data);
+      }
+      } catch (err) {
+      console.log("There was an unexpected error: " + err);
+      }
     };
 
+    const checkStatus = async () =>{
+			const url = sessionStorage.getItem("url") + "games.php";
+			const formData = new FormData();
+			formData.append("operation", "getSettings");
+			try {
+				const res = await axios({url: url, data: formData, method: "post"});
+				const settings = res.data;
+				const status = settings.find((setting) => setting.set_key === "reveal");
+				if(status && status.set_value === "1"){
+					setReveal(true);
+				}else{
+          setReveal(false)
+        }
+        }catch(err) {
+          alert("There was an unexpected error occured: ", err)
+        }
+    }
+  
     useEffect(() => {
-      getGames();
-      const intervalId = setInterval(getGames, 5000);
+      function getAllFunction(){
+        getGames();
+        checkStatus();
+      }
+      getAllFunction()
+      const intervalId = setInterval(getAllFunction, 5000);
       return () => clearInterval(intervalId); 
     }, []);
 
@@ -52,10 +75,10 @@ const PartialResult = () => {
               </tr>
             </thead>
             <tbody>
-              {game.map((games, index) => (
+              {Array.isArray(game) && game.map((games, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{games.game_letter}</td>
+                  <td>{reveal ? games.game_name : games.game_letter}</td>
                   <td>{games.totalStars}</td>
                 </tr>
               ))}

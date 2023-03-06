@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, FloatingLabel, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AlertScript from "../AlertScript";
@@ -46,10 +46,9 @@ const AdminLogin = () => {
         .then((res) => {
             if(res.data !== 0){
                 sessionStorage.setItem("isAdminLoggined", "1");
-                getAlert("success", "Success!");
+                getAlert("success", "Welcome back admin!");
                 setShowInvalid(false);
                 setTimeout(() => {navigateTo("/admin/dashboard")}, 2000)
-                console.log(res.data)
             }else{
                 setShowInvalid(false);
                 setTimeout(() => {setShowInvalid(true)}, 300)
@@ -60,6 +59,10 @@ const AdminLogin = () => {
             getAlert("danger","There was an error occured: " + err);
         })
     }
+
+    useEffect(() =>{
+        sessionStorage.setItem("isAdminLoggined", "0");
+    },[])
 
     return ( 
         <>

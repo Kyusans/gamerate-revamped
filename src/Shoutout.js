@@ -3,17 +3,19 @@ import { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap"
 
 const Shoutout = () => {
+	const [hasShoutOut, setHasShoutOut] = useState(false);
 	const [shoutOut, setShoutOut] = useState([]);
 
 	const getShoutOuts = async () =>{
 		const url = sessionStorage.getItem("url")+ "shoutout.php";
-		const jsonData = {limit: 2}
+		const jsonData = {limit: 4}
 		const formData = new FormData();
 		formData.append("operation", "getShoutOuts");
 		formData.append("json", JSON.stringify(jsonData));
 		try {
 			const res = await axios({url: url,data: formData,method: "post"})
 			if(res.data !== 0){
+				setHasShoutOut(true)
 				setShoutOut(res.data);
 			}
 		}catch(err){
@@ -30,7 +32,7 @@ const Shoutout = () => {
 		<>
 			<Card bg="success" border="dark">
 				<Card.Body className="text-center">
-						{
+						{ !hasShoutOut ? <h3 className="text-white">There is no shout out yet...</h3> :
 							shoutOut.map((shoutOuts, index) => (
 								<Row key={index}>
 									<Col className="mb-3">

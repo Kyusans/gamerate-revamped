@@ -1,19 +1,20 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Button, Card, Container, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AlertScript from "../AlertScript";
+import "../css/site.css";
 
 const AdminDashboard = () => {
-  const [status, setStatus] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [inactiveStudents, setInactiveStudents] = useState([]);
+
   const navigateTo = useNavigate();
   
   //for alert
   const [showAlert, setShowAlert] = useState(false);
   const [alertVariant, setAlertVariant] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
-
-
   function getAlert(variantAlert, messageAlert){
     setShowAlert(true);
     setAlertVariant(variantAlert);
@@ -21,90 +22,93 @@ const AdminDashboard = () => {
   }
 
   useEffect(() =>{
+    const getInactiveStudents = async () =>{
+      const url = sessionStorage.getItem("url") + "admin.php";
+      const formData = new FormData();
+      formData.append("operation", "getInactiveStudents");
+      try{
+        const res = await axios({url: url, data: formData, method:"post"})
+        if(res.data !== 0){
+          setInactiveStudents(res.data);
+        }
+      }catch(err){
+        getAlert("danger", "There was an unexpected error occured: " + err);
+      }
+    }
+    
     if(sessionStorage.getItem("isAdminLoggined") !== "1"){
-      getAlert("danger", "wait, you're not admin!")
+      getAlert("danger", "wait! you're not admin!")
       setTimeout(() => {
         navigateTo("/");
       }, 2000);
+    }else{
+      setIsLoggedIn(true);
+      getInactiveStudents();
+      const intervalId = setInterval(getInactiveStudents, 5000);
+      return () => clearInterval(intervalId);
     }
   },[navigateTo])
 
-  const getRatingStatus = () =>{
-    const url = sessionStorage.getItem("url") + "settings.php";
-
-    const formData = new FormData(); 
-    formData.append("operation", "getRatingStatus");
-    axios({
-      url: url,
-      data: formData,
-      method: "post"
-    }).then(res =>{
-     setStatus(res.data);
+  const approveStudent = (id) =>{
+    const url = sessionStorage.getItem("url") + "admin.php";
+    const studId = id;
+    const jsonData = {studId: studId}
+    const formData = new FormData();
+    formData.append("operation", "activate");
+    formData.append("json", JSON.stringify(jsonData));
+  
+    axios({url: url, data: formData, method:"post"})
+    .then(res =>{
+      console.log("res", res.data)
+      if(res.data !== 0){
+        getAlert("success", "Student approved!")
+        setTimeout(() => {
+          setShowAlert(false)
+        },1000)
+      }
+      setInactiveStudents(prevInactiveStudents => {
+        return prevInactiveStudents.filter(student => student.stud_id !== studId);
+      });
     }).catch(err =>{
-      getAlert("danger", "There was an unexpected error: ", err)
+      getAlert("danger", "There was an unexpected error occured: " + err);
     })
   }
-  const handleStatus = () =>{
-    getRatingStatus();
 
-    if(status === 0){
-      setStatus(1)
-      console.log("status to 1")
-    }else{
-      console.log("status to 0 because status is: ", status)
-      setStatus(0)
-    }
-    // status !== 0 ? setStatus(1) : setStatus(0);
-
-    console.log("status now: ", status)
-  }
-
-  // const setRatingStatus = () =>{
-  //   const url = sessionStorage("url") + "settings.php";
-  //   const jsonData = {
-  //     status: status
-  //   }
-
-  //   const formData = new FormData(); 
-
-  //   formData.append("operation", "login");
-  //   formData.append("json", JSON.stringify(jsonData));
-
-  //   axios({
-  //       url: url,
-  //       data: formData,
-  //       method: "post"
-  //   })
-
-  //   .then((res) => {
-  //       if(res.data !== 0){
-
-  //       }
-  // })
-
-  // .catch((err) =>{
-  //     getAlert("danger","There was an error occured: " + err);
-  // })
-  // }
   return (
     <>
-      <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />  
-      <Table bordered striped responsive variant="light" className="mt-3 text-center">
-        <thead>
-          <tr>
-            <th>School Id</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+      {!isLoggedIn ? (
+        <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
+      ) : (
+        <>
+          <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
+          <Table bordered striped responsive variant="dark" className="mt-3 text-center w-75 margin-auto">
+            <thead>
+              <tr>
+                <th>School Id</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>Nickname</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(inactiveStudents) &&
+                inactiveStudents.map((item, index) =>(
+                  <tr key={index}>
+                    <td>{item.stud_schoolId}</td>
+                    <td>{item.stud_name}</td>
+                    <td>{item.stud_course}</td>
+                    <td>{item.stud_nickName}</td>
+                    <td><Button onClick={() => approveStudent(item.stud_id)}>Approve</Button></td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table>
+        </>
+  )}
+</>
 
-      </Table>
-      <Card  className="small-card mt-5" bg="dark">
-        <Card.Body className="text-center">
-          <Button onClick={handleStatus}>Let students vote</Button>{" "}
-          <Button>Reveal game name</Button>
-        </Card.Body>
-      </Card>
-    </>
   );
 };
 

@@ -99,12 +99,12 @@ const GameDetail = () => {
 
     return ( 
         <>
-            <Container className="mt-1 d-flex justify-content-between">
-                <Button className="btn-danger" onClick={handleBack} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /> </Button>
+            <Container className="mt-3 d-flex justify-content-between">
+                <Button variant="outline-danger" onClick={handleBack} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /> </Button>
                 {
-                    isLoggedIn ? (<Button className="btn-success" onClick={openRateModal}>Rate Game</Button>) 
+                    isLoggedIn ? (<Button variant="outline-success" onClick={openRateModal}>Rate Game</Button>) 
                     :
-                    (<Button className="btn-success button-large" onClick={() => navigateTo("/login")}>Login first to rate game</Button>)
+                    (<Button variant="outline-success" onClick={() => navigateTo("/login")}>Login first to rate game</Button>)
                 }
             </Container>
             <Container className="text-center mt-5" style={{ maxWidth: "600px" }}>
@@ -116,9 +116,14 @@ const GameDetail = () => {
                     className="minimum-height mb-4"
                     fluid
                 /> 
-                <p className="mt-3">{gameDescription}</p>
             </Container>
-            <Card className="small-card">
+
+            <Card className="mt-3 card-thin" bg="success text-white" border="dark">
+                <Card.Body>
+                    <p>{gameDescription}</p>
+                </Card.Body>
+            </Card>
+            <Card className="card-thin mt-3" border="dark">
                 <Card.Footer><h4>Developers</h4></Card.Footer>
                 <ListGroup variant="flush">
                     {

@@ -61,20 +61,20 @@ const RateGame = (props) => {
     }
 
     const checkStatus = async () =>{
-        const url = sessionStorage.getItem("url") + "games.php";
-        const formData = new FormData();
-        formData.append("operation", "getSettings");
-        try {
-            const res = await axios({url: url, data: formData, method: "post"});
-            const settings = res.data;
-            const status = settings.find((setting) => setting.set_key === "status");
-            if(status && status.set_value === "1"){
-                addStar();
-            }else{    
-                getAlert("danger", "Rating unavailable");
-            }
+			const url = sessionStorage.getItem("url") + "games.php";
+			const formData = new FormData();
+			formData.append("operation", "getSettings");
+			try {
+				const res = await axios({url: url, data: formData, method: "post"});
+				const settings = res.data;
+				const status = settings.find((setting) => setting.set_key === "status");
+				if(status && status.set_value === "1"){
+					addStar();
+				}else{    
+					getAlert("danger", "Rating unavailable");
+				}
         }catch(err) {
-            getAlert("danger","There was an unexpected error occured: ", err)
+          getAlert("danger","There was an unexpected error occured: ", err)
         }
     }
 
@@ -104,8 +104,8 @@ const RateGame = (props) => {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button className="btn-danger" onClick={() => onHide()}>Close</Button>
-                    <Button className="btn-success" onClick={checkStatus}>Submit</Button>
+                    <Button variant="outline-danger" onClick={() => onHide()}>Close</Button>
+                    <Button variant="outline-success" onClick={checkStatus}>Submit</Button>
                 </Modal.Footer>
             </Modal>
         </>

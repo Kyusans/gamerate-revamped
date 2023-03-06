@@ -32,7 +32,7 @@ const AddNickName = () => {
 			console.log(res.data)
 			if(res.data !== 0){
 				sessionStorage.setItem("nickName", nickName);
-				
+				sessionStorage.setItem("isLoggedIn", "1");
 				getAlert("success", "Success!");
 				setTimeout(() => {
 					console.log(sessionStorage.getItem("nickName"));
@@ -48,8 +48,15 @@ const AddNickName = () => {
 	const handleSubmit = () =>{
 		if(nickName === ""){
 			getAlert("danger", "Please enter a valid nickname to proceed");
-		}else{
+		}else if(sessionStorage.getItem("nickName") === "0"){
 			addNickName();
+		}
+		else{
+			getAlert("danger", "You already have a nickname");
+			console.log("nickName: " + sessionStorage.getItem("nickName"))
+			setTimeout(() => {
+				navigateTo("/");
+			}, 2000);
 		}
 	}
   return ( 
@@ -57,7 +64,7 @@ const AddNickName = () => {
       <Container fluid="md" className="centered">
         <Card className="card-thin">
           <Card.Body className="card-body">
-            <h2 className="text-center mt-4">Nickname</h2>   
+            <h2 className="text-center mt-4">Enter nickname</h2>   
 				<AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
             <Form className="text-center">
               <Form.Group>

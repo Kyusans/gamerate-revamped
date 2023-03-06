@@ -46,8 +46,13 @@ const Login = () => {
         })
 
         .then((res) => {
+            console.log("active: " + res.data.stud_active)
+            if(res.data.stud_active === "0"){
+                getAlert("danger","Your account is pending approval")
+            }else 
             if(res.data.stud_nickName === ""){
                 sessionStorage.setItem("schoolId", res.data.stud_schoolId);
+                sessionStorage.setItem("nickName", "0");
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {navigateTo("/nickname")}, 2000)
@@ -57,7 +62,7 @@ const Login = () => {
                 sessionStorage.setItem("isLoggedIn", "1")
                 getAlert("success", "Success!");
                 setShowInvalid(false);
-                setTimeout(() => {navigateTo("/")}, 2000)
+                setTimeout(() => {navigateTo("/")}, 1000)
             }else{
                 setShowInvalid(false);
                 setTimeout(() => {setShowInvalid(true)}, 300)
@@ -98,7 +103,7 @@ const Login = () => {
                                 </FloatingLabel>
                             </Form.Group>
 
-                            <Button className="button-large mt-3 btn-lg big-height btn-success" onClick={login}><div className="text-small">Login</div></Button>
+                            <Button variant="outline-success" className="button-large mt-3 btn-lg big-height" onClick={login}><div className="text-small">Login</div></Button>
                             <hr />
                             <p className="mt-3 text-center">Don't have an account?<button className="link-button" onClick={() => navigateTo("/signup")}>Sign Up</button> </p>
                         </Form>

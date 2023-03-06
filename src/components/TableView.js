@@ -51,7 +51,6 @@ const TableView = () => {
                         <tr key={index}>
                             <td><span className="link-text text-primary" onClick={() => (handleSelectedGame(games.game_id))}>{games.game_name}</span></td>
                         </tr>
-                        
                     ))}
                 </tbody>
             </Table>

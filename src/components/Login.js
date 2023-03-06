@@ -77,7 +77,7 @@ const Login = () => {
     return ( 
         <>
             <Container fluid="md" className="centered">
-                <Card className="card-thin">
+                <Card className="card-thin" border="success">
                     <Card.Body className="card-body">
                         <h2 className="text-center mt-4">Login</h2>
                         <Container className="text-center">

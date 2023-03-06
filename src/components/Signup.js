@@ -40,7 +40,7 @@ const Signup = () => {
 	.then((res) => {
 		console.log("res ni signup: " + res.data)
 		if(res.data === -1){
-			getAlert("danger","The ID you have entered has already been registered in our system.")
+			getAlert("danger","The Id you have entered has already been registered in our system.")
 			setSchoolId("");
 		}else if(res.data !== 0){
 			getAlert("success", "Success!");
@@ -66,14 +66,13 @@ const Signup = () => {
 	}
 	const handleCourseName = (e) =>{
 		setCourse(e.target.value);
-		console.log("course: ", e.target.value)
 	}
 	return ( 
 		<>
 			<Container fluid="md" className="centered">
-				<Card className="card-thin">
+				<Card className="card-thin" border="dark">
 					<Card.Body className="card-body">
-						<h2 className="text-center mt-4">Signup</h2>
+						<h2 className="text-center mt-4 mb-4">Signup</h2>
 						<Container className="text-center">
 							<AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
 						</Container>
@@ -87,7 +86,7 @@ const Signup = () => {
 									))}
 								</Form.Select>
 								<Form.Control.Feedback type="invalid">
-										This field is required
+									Select course
 								</Form.Control.Feedback>
 							</Form.Group>
 
@@ -139,7 +138,7 @@ const Signup = () => {
 								</FloatingLabel>
 							</Form.Group>
 							
-							<Button type="submit" variant="outline-success" className="button-large mt-3 btn-lg big-height"><div className="text-small">Submit</div></Button>
+							<Button type="submit" variant="outline-success" className="button-large mt-4 btn-lg big-height"><div className="text-small">Submit</div></Button>
 							<hr />
 							<p className="mt-3 text-center">Already have an account?<button className="link-button" onClick={() => navigateTo("/login")}>Login</button> </p>
 						</Form>

@@ -27,9 +27,9 @@ const RateGame = (props) => {
     };
 
     const addStar = () =>{
-        const url =sessionStorage.getItem("url") + "games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
 
-        const schoolId = sessionStorage.getItem("schoolId");
+        const schoolId = localStorage.getItem("schoolId");
 
         const jsonData = {gameId: gameId, schoolId: schoolId, stars: star}
         const formData = new FormData();
@@ -51,6 +51,7 @@ const RateGame = (props) => {
                     handleHide();
                 }, 1250);
             }else{
+                console.log(res.data)
                 getAlert("danger", "There was an unexpected error");
             }
         })

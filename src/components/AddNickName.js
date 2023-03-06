@@ -28,7 +28,7 @@ const AddNickName = (props) => {
 		.then((res) =>{
 			if(res.data !== 0){
 				sessionStorage.setItem("nickName", nickName);
-				sessionStorage.setItem("isLoggedIn", "1");
+				localStorage.setItem("isLoggedIn", "A");
 				getAlert("success", "Success!");
 				setTimeout(() => {
 					handleHide();

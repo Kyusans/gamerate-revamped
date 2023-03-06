@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Form, Button, Container, FloatingLabel, Card, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -38,15 +38,10 @@ const Login = (props) => {
     }
 
     function handleHide(){
-        onHide();
         setSchoolId("");
+        setShowAlert(false)
+        onHide();
     }
-
-    useEffect(() =>{
-        localStorage.setItem("isLoggedIn", "0")
-        localStorage.setItem("schoolId", null);
-        localStorage.setItem("nickName", "")
-    },[])
 
     function getAlert(variantAlert, messageAlert){
         setShowAlert(true);
@@ -87,12 +82,13 @@ const Login = (props) => {
             }else if(res.data !== 0){
                 localStorage.setItem("schoolId", res.data.stud_schoolId);
                 localStorage.setItem("nickName", res.data.stud_nickName);
-                localStorage.setItem("isLoggedIn", "1")
+                localStorage.setItem("isLoggedIn", "A")
+                console.log("schoolid: " + localStorage.getItem("schoolId"));
                 console.log("from loggin " + localStorage.getItem("isLoggedIn"))
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {
-                    onHide();
+                    handleHide()
                 }, 2000)
             }else{
                 setShowInvalid(false);

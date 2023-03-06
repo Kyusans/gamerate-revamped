@@ -58,9 +58,10 @@ const ShoutoutForm = (props) => {
   const handleSubmit = () =>{
     if(shoutOut === ""){
       getAlert("danger", "Please enter a valid message");
-    }else if(localStorage.getItem("isLoggedIn") === "1"){
+    }else if(localStorage.getItem("isLoggedIn") === "A"){
       addShoutOut();
     }else{
+      console.log("from shoutoutform " + localStorage.getItem("isLoggedIn"))
       getAlert("danger", "You need to login first");
       setTimeout(() => {
         openLoginModal();

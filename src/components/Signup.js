@@ -3,7 +3,9 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Button, Card, Container, FloatingLabel, Form, Modal } from "react-bootstrap";
+import AdminLogin from "./admin/AdminLogin";
 import AlertScript from "./AlertScript";
+import "./css/site.css";
 
 const Signup = (props) => {
 	const {show, onHide} = props;
@@ -17,7 +19,15 @@ const Signup = (props) => {
 	const [alertVariant, setAlertVariant] = useState("");
 	const [alertMessage, setAlertMessage] = useState("");
 	const courseList = ['ABM', 'ABM-HT', 'BACOM', 'BECED', 'BEED', 'BSA', 'BSAR', 'BSBA-FM', 'BSBA-MM', 'BSCE', 'BSCPE', 'BSCRIM', 'BSED-EN', 'BSED-FIL', 'BSED-MATH', 'BSEE', 'BSHM', 'BSHRM', 'BSIT', 'BSMA', 'BSME', 'BSMLS', 'BSN', 'BSPHARMA', 'BSTM', 'CTEACH', 'ELEM', 'ETEEAP', 'GAS', 'GAS-CRI', 'GAS-EDU', 'GAS-IT', 'HS', 'HUMSS', 'MAEDA', 'MAEED', 'MASE', 'MATSS', 'MGM', 'MSCRIM', 'PHDEDAS', 'STEM', 'STEM-HEALTH', 'TVL', 'TVL-EIM', 'TVL-EPAS', 'TVL-HOSPITALITY', 'TVL-MACH', 'TVL-PROGRAMMING', 'TVL-SMAW', 'TVL-TOURISM'];
-
+	
+	const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
+    const openAdminLoginModal = () =>{
+        setShowAdminLoginModal(true);
+    }
+    const closeAdminLoginModal =  () =>{
+        setShowAdminLoginModal(false);
+        handleHide()
+    }
 	function getAlert(variantAlert, messageAlert){
 		setShowAlert(true);
 		setAlertVariant(variantAlert);
@@ -78,10 +88,14 @@ const Signup = (props) => {
 		setShowAlert(false);
 		onHide();
 	}
+
 	return ( 
 		<>
 			<Modal show={show} onHide={onHide} fullscreen={true}>
 				<Modal.Body>
+					<Container className="text-end">
+						<button className="link-button small-button" onClick={openAdminLoginModal}></button>
+					</Container>
 					<Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
 					<Container fluid="md" className="centered">
 						<Card className="card-thin" border="success" bg="light">
@@ -159,6 +173,7 @@ const Signup = (props) => {
 					</Container>
 				</Modal.Body>
 			</Modal>
+			<AdminLogin show={showAdminLoginModal} onHide={closeAdminLoginModal} />
 		</>
 	);
 }

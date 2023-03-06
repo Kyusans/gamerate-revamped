@@ -1,15 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Button, Table } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Button, Container, Modal, Table } from "react-bootstrap";
+
 import AlertScript from "../AlertScript";
 import "../css/site.css";
 
-const AdminDashboard = () => {
+const AdminDashboard = (props) => {
+  const {show, onHide} = props;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [inactiveStudents, setInactiveStudents] = useState([]);
-
-  const navigateTo = useNavigate();
   
   //for alert
   const [showAlert, setShowAlert] = useState(false);
@@ -36,10 +35,10 @@ const AdminDashboard = () => {
       }
     }
     
-    if(sessionStorage.getItem("isAdminLoggined") !== "1"){
+    if(localStorage.getItem("isAdminLoggined") !== "1"){
       getAlert("danger", "wait! you're not admin!")
       setTimeout(() => {
-        navigateTo("/");
+        onHide();
       }, 2000);
     }else{
       setIsLoggedIn(true);
@@ -47,7 +46,7 @@ const AdminDashboard = () => {
       const intervalId = setInterval(getInactiveStudents, 5000);
       return () => clearInterval(intervalId);
     }
-  },[navigateTo])
+  },[onHide])
 
   const approveStudent = (id) =>{
     const url = sessionStorage.getItem("url") + "admin.php";
@@ -76,37 +75,43 @@ const AdminDashboard = () => {
 
   return (
     <>
-      {!isLoggedIn ? (
-        <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
-      ) : (
-        <>
-          <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
-          <Table bordered striped responsive variant="dark" className="mt-3 text-center w-75 margin-auto">
-            <thead>
-              <tr>
-                <th>School Id</th>
-                <th>Name</th>
-                <th>Course</th>
-                <th>Nickname</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.isArray(inactiveStudents) &&
-                inactiveStudents.map((item, index) =>(
-                  <tr key={index}>
-                    <td>{item.stud_schoolId}</td>
-                    <td>{item.stud_name}</td>
-                    <td>{item.stud_course}</td>
-                    <td>{item.stud_nickName}</td>
-                    <td><Button onClick={() => approveStudent(item.stud_id)}>Approve</Button></td>
+      <Modal show={show} onHide={onHide} fullscreen={true}>
+        <Modal.Body>
+          {!isLoggedIn ? (
+            <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
+          ) : (
+            <>
+              <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
+              <Table bordered striped responsive variant="dark" className="mt-3 text-center w-75 margin-auto">
+                <thead>
+                  <tr>
+                    <th>School Id</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Nickname</th>
+                    <th>Actions</th>
                   </tr>
-                ))
-              }
-            </tbody>
-          </Table>
-        </>
-  )}
+                </thead>
+                <tbody>
+                  {Array.isArray(inactiveStudents) &&
+                    inactiveStudents.map((item, index) =>(
+                      <tr key={index}>
+                        <td>{item.stud_schoolId}</td>
+                        <td>{item.stud_name}</td>
+                        <td>{item.stud_course}</td>
+                        <td>{item.stud_nickName}</td>
+                        <td><Button onClick={() => approveStudent(item.stud_id)}>Approve</Button></td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </Table>
+              <Container className="text-center">
+                <Button>Settings</Button>
+              </Container>
+          </>)}
+        </Modal.Body>
+      </Modal>
 </>
 
   );

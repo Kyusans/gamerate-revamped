@@ -14,7 +14,6 @@ const GameDetail = (props) => {
     const [gameIcon, setGameIcon] = useState("");
     const [image, setImage] = useState([]);
     const [dev, setDev] = useState([]);
-    const [isLoggedIn , setIsLoggedIn] = useState(false);
 
     // Modal
     const [showRateModal, setShowRateModal] = useState(false);
@@ -30,11 +29,7 @@ const GameDetail = (props) => {
         setShowLoginModal(true);
     }
     const closeLoginModal =  () =>{
-        if(localStorage.getItem("isLoggedIn") === "1"){
-            setIsLoggedIn(true);
-        }else{
-            setIsLoggedIn(false);
-        }
+        console.log("from close login modal " + localStorage.getItem("isLoggedIn"))
         setShowLoginModal(false);
     }
     
@@ -51,7 +46,6 @@ const GameDetail = (props) => {
         console.log("isLoggedin: " + localStorage.getItem("isLoggedIn"))
         
         const getDevs = async () =>{
-            console.log("selectedGameId " + selectedGameId)
             const gameId = selectedGameId;
             const url = sessionStorage.getItem("url")+ "games.php";
             
@@ -116,7 +110,7 @@ const GameDetail = (props) => {
                     <Container className="mt-3 d-flex justify-content-between">
                         <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /> </Button>
                         {
-                           isLoggedIn ? <Button variant="outline-success" onClick={openRateModal}>Rate Game</Button>
+                           localStorage.getItem("isLoggedIn") === "A" ? <Button variant="outline-success" onClick={openRateModal}>Rate Game</Button>
                             :
                             <Button variant="outline-success" onClick={openLoginModal}>Login first to rate game</Button>
                         }

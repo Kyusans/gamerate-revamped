@@ -115,3 +115,8 @@
 .border-1 {
     border: 1px solid black;
 }
+
+.small-button {
+    height: 50px;
+    width: 50px;
+}

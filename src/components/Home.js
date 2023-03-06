@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 
 import CardView from "./CardView";
@@ -10,6 +10,7 @@ const Home = () => {
     var url = "";
     
     const [isCardView, setIsCardView] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn"));
 
     const handleChangeView = () =>{
         isCardView ? setIsCardView(false) : setIsCardView(true);
@@ -17,13 +18,31 @@ const Home = () => {
     url = "http://www.shareatext.com/itdays/api/";
     url = "http://localhost/itdays/api/";
     sessionStorage.setItem("url", url);
-    function handleSignout(){
+
+    function handleSignout() {
         localStorage.setItem("isLoggedIn", "0");
-    }
+        setIsLoggedIn("0");
+        console.log("logged out na : " + localStorage.getItem("isLoggedIn"));
+      }
+    
+      function handleLogin() {
+        localStorage.setItem("isLoggedIn", "A");
+        setIsLoggedIn("A");
+        console.log("logged in : " + localStorage.getItem("isLoggedIn"));
+      }
+    
+      useEffect(() => {
+        setIsLoggedIn(localStorage.getItem("isLoggedIn"))
+      }, [isLoggedIn]);
+
     return (    
         <>
-            <Button variant="outline-danger" onClick={handleSignout}>Signout</Button>
-            <Container className="mt-3">     
+            <Container className="text-end mt-3">
+                {isLoggedIn === "A" ? 
+                <Button variant="outline-danger" onClick={handleSignout}>Signout</Button> : <Button variant="outline-success" onClick={handleLogin}>Login</Button>
+                } 
+            </Container>
+            <Container className="mt-4">     
                 <PartialResult />
                 <hr />
             </Container>

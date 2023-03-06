@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
-import { Button, Card, Container, FloatingLabel, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Button, Card, Container, FloatingLabel, Form, Modal } from "react-bootstrap";
 import AlertScript from "./AlertScript";
 
-const Signup = () => {
+const Signup = (props) => {
+	const {show, onHide} = props;
 	const [schoolId, setSchoolId] = useState("");
 	const [fullName, setFullName] = useState("");
 	const [nickName, setNickName] = useState("");
@@ -14,7 +16,6 @@ const Signup = () => {
 	const [showAlert, setShowAlert] = useState(false);
 	const [alertVariant, setAlertVariant] = useState("");
 	const [alertMessage, setAlertMessage] = useState("");
-	const navigateTo = useNavigate();
 	const courseList = ['ABM', 'ABM-HT', 'BACOM', 'BECED', 'BEED', 'BSA', 'BSAR', 'BSBA-FM', 'BSBA-MM', 'BSCE', 'BSCPE', 'BSCRIM', 'BSED-EN', 'BSED-FIL', 'BSED-MATH', 'BSEE', 'BSHM', 'BSHRM', 'BSIT', 'BSMA', 'BSME', 'BSMLS', 'BSN', 'BSPHARMA', 'BSTM', 'CTEACH', 'ELEM', 'ETEEAP', 'GAS', 'GAS-CRI', 'GAS-EDU', 'GAS-IT', 'HS', 'HUMSS', 'MAEDA', 'MAEED', 'MASE', 'MATSS', 'MGM', 'MSCRIM', 'PHDEDAS', 'STEM', 'STEM-HEALTH', 'TVL', 'TVL-EIM', 'TVL-EPAS', 'TVL-HOSPITALITY', 'TVL-MACH', 'TVL-PROGRAMMING', 'TVL-SMAW', 'TVL-TOURISM'];
 
 	function getAlert(variantAlert, messageAlert){
@@ -44,7 +45,7 @@ const Signup = () => {
 			setSchoolId("");
 		}else if(res.data !== 0){
 			getAlert("success", "Success!");
-			setTimeout(() => {navigateTo("/login")}, 2000)
+			setTimeout(() => {handleHide()}, 2000)
 	}
 	})
 	.catch((err) =>{
@@ -67,84 +68,97 @@ const Signup = () => {
 	const handleCourseName = (e) =>{
 		setCourse(e.target.value);
 	}
+
+	function handleHide(){
+		setSchoolId("");
+		setFullName("");
+		setNickName("");
+		setCourse("");
+		setValidated(false);
+		setShowAlert(false);
+		onHide();
+	}
 	return ( 
 		<>
-			<Container fluid="md" className="centered">
-				<Card className="card-thin" border="dark">
-					<Card.Body className="card-body">
-						<h2 className="text-center mt-4 mb-4">Signup</h2>
-						<Container className="text-center">
-							<AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
-						</Container>
-						
-						<Form noValidate validated={validated} className="text-center" onSubmit={formValidation}>
-							<Form.Group className="mt-2 w-75 margin-auto">
-								<Form.Select aria-label="Default select example" onChange={handleCourseName} required defaultValue="" >
-									<option value="" disabled>Select course</option>
-									{courseList.map((item, index) =>(
-									<option value={item} key={index}>{item}</option>
-									))}
-								</Form.Select>
-								<Form.Control.Feedback type="invalid">
-									Select course
-								</Form.Control.Feedback>
-							</Form.Group>
+			<Modal show={show} onHide={onHide} fullscreen={true}>
+				<Modal.Body>
+					<Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+					<Container fluid="md" className="centered">
+						<Card className="card-thin" border="success" bg="light">
+							<Card.Body className="card-body">
+								<h2 className="text-center mt-4 mb-4">Signup</h2>
+								<Container className="text-center">
+									<AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
+								</Container>
+								
+								<Form noValidate validated={validated} className="text-center" onSubmit={formValidation}>
+									<Form.Group className="mt-2 w-75 margin-auto">
+										<Form.Select aria-label="Default select example" onChange={handleCourseName} required defaultValue="" >
+											<option value="" disabled>Select course</option>
+											{courseList.map((item, index) =>(
+											<option value={item} key={index}>{item}</option>
+											))}
+										</Form.Select>
+										<Form.Control.Feedback type="invalid">
+											Select course
+										</Form.Control.Feedback>
+									</Form.Group>
 
-							<Form.Group>
-								<FloatingLabel className="fatter-text mt-3 centered-label" label="School Id">
-									<Form.Control
-											className="form-control"
-											type="text"
-											placeholder="School Id"
-											value={schoolId}
-											onChange={(e) => setSchoolId(e.target.value)}
-											required
-									/>
-									<Form.Control.Feedback type="invalid">
-										This field is required
-									</Form.Control.Feedback>
-								</FloatingLabel>
-							</Form.Group>
+									<Form.Group>
+										<FloatingLabel className="fatter-text mt-3 centered-label" label="School Id">
+											<Form.Control
+													className="form-control"
+													type="text"
+													placeholder="School Id"
+													value={schoolId}
+													onChange={(e) => setSchoolId(e.target.value)}
+													required
+											/>
+											<Form.Control.Feedback type="invalid">
+												This field is required
+											</Form.Control.Feedback>
+										</FloatingLabel>
+									</Form.Group>
 
-							<Form.Group>
-								<FloatingLabel className="fatter-text mt-3 centered-label" label="Full Name">
-									<Form.Control
-											className="form-control"
-											type="text"
-											placeholder="LAST NAME, FIRST NAME MIDDLE NAME"
-											value={fullName}
-											onChange={(e) => setFullName(e.target.value)}
-											required
-									/>
-									<Form.Control.Feedback type="invalid">
-										This field is required
-									</Form.Control.Feedback>
-								</FloatingLabel>
-							</Form.Group>
+									<Form.Group>
+										<FloatingLabel className="fatter-text mt-3 centered-label" label="Full Name">
+											<Form.Control
+													className="form-control"
+													type="text"
+													placeholder="LAST NAME, FIRST NAME MIDDLE NAME"
+													value={fullName}
+													onChange={(e) => setFullName(e.target.value)}
+													required
+											/>
+											<Form.Control.Feedback type="invalid">
+												This field is required
+											</Form.Control.Feedback>
+										</FloatingLabel>
+									</Form.Group>
 
-							<Form.Group>
-								<FloatingLabel className="fatter-text mt-3 centered-label" label="Nickname">
-									<Form.Control
-											className="form-control"
-											type="text"
-											placeholder="Nickname"
-											value={nickName}
-											onChange={(e) => setNickName(e.target.value)}
-											required
-									/>
-									<Form.Control.Feedback type="invalid">
-										This field is required
-									</Form.Control.Feedback>
-								</FloatingLabel>
-							</Form.Group>
-							
-							<Button type="submit" variant="outline-success" className="button-large mt-4 btn-lg big-height"><div className="text-small">Submit</div></Button>
-							<hr />
-							<p className="mt-3 text-center">Already have an account?<button className="link-button" onClick={() => navigateTo("/login")}>Login</button> </p>
-						</Form>
-					</Card.Body>
-					</Card>
-			</Container>
+									<Form.Group>
+										<FloatingLabel className="fatter-text mt-3 centered-label" label="Nickname">
+											<Form.Control
+													className="form-control"
+													type="text"
+													placeholder="Nickname"
+													value={nickName}
+													onChange={(e) => setNickName(e.target.value)}
+													required
+											/>
+											<Form.Control.Feedback type="invalid">
+												This field is required
+											</Form.Control.Feedback>
+										</FloatingLabel>
+									</Form.Group>
+									
+									<Button type="submit" variant="outline-success" className="button-large mt-4 btn-lg big-height"><div className="text-small">Submit</div></Button>
+								</Form>
+							</Card.Body>
+							</Card>
+					</Container>
+				</Modal.Body>
+			</Modal>
 		</>
 	);
 }

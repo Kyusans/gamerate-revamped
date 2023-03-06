@@ -1,12 +1,27 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Card, Col, Container, Row, CardGroup } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import "./css/site.css";
+import GameDetail from "./GameDetail";
 
 const CardView = () => {
+  const [gameId, setGameId] = useState("");
+  // Modal
+  const [showGameDetailModal, setShowGameDetailModal] = useState(false);
+
+  const openGameDetailModal = (id) =>{
+    setGameId(id)
+    setShowGameDetailModal(true);
+  }
+  const handleGameDetailModal = (num) =>{
+    openGameDetailModal(num);
+  }
+  const closeGameDetailModal =  () =>{
+    setGameId("")
+    setShowGameDetailModal(false);
+  }
   const [game, setGame] = useState([]);
-  const navigateTo = useNavigate();
+
 
   const getGames = async () => {
     const url = sessionStorage.getItem("url") + "games.php";
@@ -18,12 +33,8 @@ const CardView = () => {
         setGame(res.data);
       }
     }catch(err){
-      alert("Card View There was an unexpected error occurred: " + err);
+      alert("Card View getGames There was an unexpected error occurred: " + err);
     }
-  };
-
-  const handleSelectedGame = (gameId) => {
-    navigateTo("/game", { state: { selectedGameId: gameId } });
   };
 
   useEffect(() => {
@@ -38,7 +49,7 @@ const CardView = () => {
             game.map((games, index) => (
               <Col key={index} md={3} xs={6}>
                 <CardGroup className="justify-content-center">
-                  <Card onClick={() => handleSelectedGame(games.game_id)} className="mb-5 d-flex flex-column" style={{ border: '2px solid black' }}>
+                  <Card onClick={() => handleGameDetailModal(games.game_id)} className="mb-5 d-flex flex-column" style={{ border: '2px solid black' }}>
                     <Card.Img
                       className="mx-auto icon-image"
                       variant="top"
@@ -53,6 +64,7 @@ const CardView = () => {
             ))}
         </Row>
       </Container>
+      <GameDetail show={showGameDetailModal} onHide={closeGameDetailModal} selectedGameId={gameId}/>
     </>
   );
 };

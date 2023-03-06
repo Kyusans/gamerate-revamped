@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Alert, Container, Table } from "react-bootstrap";
+import { Alert, Button, Container, Table } from "react-bootstrap";
 
 const PartialResult = () => {
     const [game, setGame] = useState([]);
@@ -28,7 +28,7 @@ const PartialResult = () => {
         console.log(res.data);
       }
       } catch (err) {
-      console.log("There was an unexpected error: " + err);
+      console.log("Partial Result getGame There was an unexpected error: " + err);
       }
     };
 
@@ -46,18 +46,24 @@ const PartialResult = () => {
           setReveal(false)
         }
         }catch(err) {
-          alert("There was an unexpected error occured: ", err)
+          alert("Partial Result CheckStats There was an unexpected error occured: ", err)
         }
     }
-  
+    function getAllFunction(){
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        checkStatus();
+        getGames();  
+      }, 1000);     
+    }
+
     useEffect(() => {
       function getAllFunction(){
-        getGames();
         checkStatus();
+        getGames();       
       }
       getAllFunction()
-      const intervalId = setInterval(getAllFunction, 5000);
-      return () => clearInterval(intervalId); 
     }, []);
 
   return (
@@ -65,8 +71,13 @@ const PartialResult = () => {
       <Container>
         {isLoading ? (
           <Alert variant="success">Getting data...</Alert>
-        ) : (
-          <Table bordered striped responsive variant="light" className="mt-3 text-center">
+        ) : 
+        (<>
+          <Container className="d-flex justify-content-between align-items-center">
+            <h1>Partial Result</h1>
+            <Button variant="outline-success" onClick={getAllFunction}>Refresh data</Button>
+          </Container>  
+          <Table bordered striped responsive variant="light" className="mt-1 text-center">
             <thead>
               <tr>
                 <th className="green-header text-white">Rank</th>
@@ -84,7 +95,7 @@ const PartialResult = () => {
               ))}
             </tbody>
           </Table>
-        )}
+        </>)}
       </Container>
     </>
   );

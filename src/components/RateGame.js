@@ -48,7 +48,7 @@ const RateGame = (props) => {
             }else if(res.data === 1){
                 getAlert("success", `You rated ${star} stars`)
                 setTimeout(() => {
-                    onHide();
+                    handleHide();
                 }, 1250);
             }else{
                 getAlert("danger", "There was an unexpected error");
@@ -78,18 +78,26 @@ const RateGame = (props) => {
         }
     }
 
+    function handleHide(){
+        setShowAlert(false);
+        setStar(0);
+        onHide();
+    }
+
     return ( 
         <>
-            <Modal show={show} onHide={onHide}>
+            <Modal show={show} onHide={onHide} variant="success">
                 <Modal.Header>
-                    <Modal.Title>
-                        Rate this game
-                    </Modal.Title>
+                    <Modal.Title>Rate this game</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>               
                     <div className="text-center">
                         <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
+                        You can rate as many games as you want <br />
+                        You can rate a specific game only once <br />
+                        You can not update your ratings
+                        
                         <div className="rating-container">
                             <Rating
                                 count={5}
@@ -104,7 +112,7 @@ const RateGame = (props) => {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="outline-danger" onClick={() => onHide()}>Close</Button>
+                    <Button variant="outline-danger" onClick={() => handleHide()}>Close</Button>
                     <Button variant="outline-success" onClick={checkStatus}>Submit</Button>
                 </Modal.Footer>
             </Modal>

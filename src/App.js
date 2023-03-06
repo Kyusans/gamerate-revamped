@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter , Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import NavBar from './components/NavBar';
 import Login from './components/Login';
@@ -15,10 +15,9 @@ import AdminSettings from './components/admin/AdminSettings';
 function App() {
   return (
     <>
-      <nav>
-        <NavBar />
-      </nav>
-      <Router basename='/itdays'>
+      <NavBar />
+
+      <BrowserRouter basename='/itdays'>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -31,7 +30,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/admin/dashboard/settings" element={<AdminSettings />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </>
   );
 }

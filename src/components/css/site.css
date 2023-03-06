@@ -86,7 +86,7 @@
 
 .icon-image {
     width: 300px;
-    height: 300px;
+    height: 325px;
 }
 
 .form-control.textarea {
@@ -105,4 +105,13 @@
 .brand{
     padding-left: 10px;
     padding-right: 20px;
+}
+
+.max-height{
+    max-height: 300px;
+    max-width: 300px;
+}
+
+.border-1 {
+    border: 1px solid black;
 }

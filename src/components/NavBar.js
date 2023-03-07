@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import Login from "./Login";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import { NavLink, Nav, NavDropdown, Navbar} from "react-bootstrap";
+import About from "./About";
 import "./css/site.css";
 
 function NavBar() {
+  const [showAboutModal, setShowAboutModal] = useState(false);
+  const openAboutModal = () => {
+    setShowAboutModal(true);
+  };
+  const closeAboutModal = () => {
+    setShowAboutModal(false);
+  };
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -33,7 +38,6 @@ function NavBar() {
     } else {
       openLoginModal();
     }
-    console.log("logged in: " + localStorage.getItem("isLoggedIn"));
   }
 
   useEffect(() => {
@@ -43,11 +47,11 @@ function NavBar() {
   return (
     <>
       <Navbar className="nav-background" expand="lg" text="light">
-        <Container>
-          <Navbar.Brand href="#home">IT Days 2023</Navbar.Brand>
+          <Navbar.Brand className="brand">IT Days 2023</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav "/>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="w-75">
+          <Navbar.Collapse className="brand" id="basic-navbar-nav">
+            <NavLink style={{color: "white", marginRight: "10px"}} onClick={openAboutModal}>About</NavLink>
+            <Nav className="w-75"> 
               <NavDropdown title={<span>Account</span>}>
                 <NavDropdown.Item onClick={handleDropdown}>
                   {isLoggedIn ? "Signout" : "Login"}
@@ -55,9 +59,9 @@ function NavBar() {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
-        </Container>
       </Navbar>
       <Login show={showLoginModal} onHide={closeLoginModal} />
+      <About show={showAboutModal} onHide={closeAboutModal} />
     </>
   );
 }

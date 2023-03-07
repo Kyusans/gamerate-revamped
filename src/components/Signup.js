@@ -26,7 +26,6 @@ const Signup = (props) => {
     }
     const closeAdminLoginModal =  () =>{
         setShowAdminLoginModal(false);
-		console.log("signup hide closeAdmin()")
         handleHide();
     }
 	function getAlert(variantAlert, messageAlert){
@@ -48,16 +47,13 @@ const Signup = (props) => {
 			data: formData,
 			method: "post"
 		})
-
 		.then((res) => {
-			console.log("res ni signup: " + res.data)
 			if(res.data === -1){
 				getAlert("danger","The Id you have entered has already been registered in our system.")
 				setSchoolId("");
 			}else if(res.data !== 0){
 				getAlert("success", "Success!");
 				setTimeout(() => {
-					console.log("signup hide signup()")
 					handleHide();
 				}, 2000)
 		}
@@ -96,14 +92,16 @@ const Signup = (props) => {
 	return ( 
 		<>
 			<Modal show={show} onHide={onHide} fullscreen={true}>
+				<Modal.Header>
+					<Container>
+						<Button variant="outline-danger" onClick={handleHide} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+					</Container>
+				</Modal.Header>
 				<Modal.Body>
+
 					<Container className="text-end">
 						<button className="link-button small-button" onClick={openAdminLoginModal}></button>
 					</Container>
-					<Container >
-						<Button variant="outline-danger" onClick={handleHide} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
-					</Container>
-					
 					<Container fluid="md" className="centered">
 						<Card className="card-thin" border="success" bg="light">
 							<Card.Body className="card-body">

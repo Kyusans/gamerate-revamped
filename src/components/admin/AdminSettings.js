@@ -28,7 +28,6 @@ const AdminSettings = (props) => {
         formData.append("operation", "getRatingStatus");
         axios({url: url, data: formData, method:"post"})
         .then(res =>{
-          console.log("res sa rating: ", res.data)
           if(res.data === "1"){
             setRateStatus(true);
           }else{
@@ -44,7 +43,6 @@ const AdminSettings = (props) => {
         formData.append("operation", "getRevealStatus");
         axios({url: url, data: formData, method:"post"})
         .then(res =>{
-          console.log("res sa reveal: ", res.data)
           if(res.data === "1"){
             setRevealStatus(true);
           }else{
@@ -58,7 +56,6 @@ const AdminSettings = (props) => {
         getRatingStatus();
         getRevealStatus();
       }
-      console.log("gi call ang useEffect sa settings");
       checkStatus();
     }
   },[revealStatus, rateStatus, show])
@@ -72,7 +69,6 @@ const AdminSettings = (props) => {
 
     axios({url: url, data: formData, method:"post"})
     .then(res =>{
-      console.log("res", res.data)
       if(res.data !== 0){
         if(status === 1){
 					getAlert("success", "Success! rating status is now: can rate");
@@ -105,10 +101,8 @@ const AdminSettings = (props) => {
     const formData = new FormData();
     formData.append("operation", "setRevealStatus");
     formData.append("json", JSON.stringify(jsonData));
-		console.log("json", JSON.stringify(jsonData))
     axios({url: url, data: formData, method:"post"})
     .then(res =>{
-      console.log("res", res.data)
       if(res.data !== 0){
         if(status === 1){
 					getAlert("success", "Success! reveal status is now: revealed");

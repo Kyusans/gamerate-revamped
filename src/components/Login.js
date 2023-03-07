@@ -30,7 +30,6 @@ const Login = (props) => {
     const [showSignupModal, setShowSignupModal] = useState(false);
     const openSignupModal = () =>{
         setShowSignupModal(true);
-        console.log("open modal")
     }
     const closeSignupModal =  () =>{
         setShowSignupModal(false);
@@ -67,7 +66,6 @@ const Login = (props) => {
         })
 
         .then((res) => {
-            console.log("res data nick: " + res.data.stud_nickName)
             if(res.data.stud_active === "0"){
                 getAlert("danger","Your account is pending approval")
             }else if(res.data.stud_nickName === ""){
@@ -82,8 +80,6 @@ const Login = (props) => {
                 localStorage.setItem("schoolId", res.data.stud_schoolId);
                 localStorage.setItem("nickName", res.data.stud_nickName);
                 localStorage.setItem("isLoggedIn", "A")
-                console.log("schoolid: " + localStorage.getItem("schoolId"));
-                console.log("from loggin " + localStorage.getItem("isLoggedIn"))
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {
@@ -103,10 +99,12 @@ const Login = (props) => {
     return ( 
         <>
             <Modal show={show} onHide={onHide} fullscreen={true}>
-                <Modal.Body>
-                    <Container className="mt-5">
+                <Modal.Header>
+                    <Container>
                         <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
                     </Container>
+                </Modal.Header>
+                <Modal.Body>
                     <Container fluid="md" className="centered">
                         <Card className="card-thin" border="success" bg="light">
                             <Card.Body className="card-body">

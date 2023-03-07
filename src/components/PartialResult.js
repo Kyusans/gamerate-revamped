@@ -25,11 +25,10 @@ const PartialResult = () => {
 
       if(res.data !== 0) {
         setGame(res.data);
-      }else{
-        console.log(res.data);
       }
+      
       } catch (err) {
-      console.log("Partial Result getGame There was an unexpected error: " + err);
+        alert("Partial Result getGame There was an unexpected error: " + err);
       }
     };
 

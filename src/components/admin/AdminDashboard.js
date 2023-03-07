@@ -62,7 +62,6 @@ const AdminDashboard = (props) => {
   
     axios({url: url, data: formData, method:"post"})
     .then(res =>{
-      console.log("res", res.data)
       if(res.data !== 0){
         getAlert("success", "Student approved!")
         setTimeout(() => {

@@ -23,7 +23,6 @@ const AddNickName = (props) => {
 		const formData = new FormData();
 		formData.append("json", JSON.stringify(jsonData));
 		formData.append("operation", "addNickName");
-		console.log("json sa nickname " + JSON.stringify(jsonData))
 		axios({url: url, data: formData, method: "post"})
 		.then((res) =>{
 			if(res.data !== 0){

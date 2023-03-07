@@ -51,7 +51,6 @@ const RateGame = (props) => {
                     handleHide();
                 }, 1250);
             }else{
-                console.log(res.data)
                 getAlert("danger", "There was an unexpected error");
             }
         })

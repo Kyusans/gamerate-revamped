@@ -37,14 +37,12 @@ const ShoutoutForm = (props) => {
 		const schoolId = localStorage.getItem("schoolId");
     const nickName = localStorage.getItem("nickName");
 		const jsonData = {shoutOut: shoutOut, nickName: nickName, schoolId : schoolId}
-		console.log(JSON.stringify(jsonData))
 		const formData = new FormData();
 		formData.append("json", JSON.stringify(jsonData));
 		formData.append("operation", "saveShoutOut");
 
 		axios({url: url, data: formData, method: "post"})
 		.then((res) =>{
-			console.log(res.data)
 			if(res.data !== 0){
 				getAlert("success", "Success!");
 				setTimeout(() => {
@@ -63,7 +61,6 @@ const ShoutoutForm = (props) => {
     }else if(localStorage.getItem("isLoggedIn") === "A"){
       addShoutOut();
     }else{
-      console.log("from shoutoutform " + localStorage.getItem("isLoggedIn"))
       getAlert("danger", "You need to login first");
       setTimeout(() => {
         openLoginModal();

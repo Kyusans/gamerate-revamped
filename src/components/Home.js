@@ -8,7 +8,6 @@ import Shoutout from "./Shoutout";
 const Home = () => {
     var url = "";
     url = "http://www.shareatext.com/itdays/api/";
-   // url = "http://localhost/itdays/api/";
     sessionStorage.setItem("url", url);
   return (
     <>

@@ -37,12 +37,12 @@ const Shoutout = () => {
 	}
 
 	function handleGetShoutout(){
+		getShoutOuts();
 		setIsButtonDisabled(true);
 		setHasShoutOut(false);
 		setTimeout(() => {
 			setHasShoutOut(true);
-			getShoutOuts();
-		}, 750);
+		}, 1000);
 
 		setTimeout(() =>{
 			setIsButtonDisabled(false);

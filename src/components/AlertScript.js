@@ -18,19 +18,5 @@ const AlertScript = (props) => {
         </>
      );
 }
- 
+
 export default AlertScript;
-
-//   //for alert
-//   const [showAlert, setShowAlert] = useState(false);
-//   const [alertVariant, setAlertVariant] = useState("");
-//   const [alertMessage, setAlertMessage] = useState("");
-
-
-// function getAlert(variantAlert, messageAlert){
-//     setShowAlert(true);
-//     setAlertVariant(variantAlert);
-//     setAlertMessage(messageAlert);
-//  }
-
-// <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />

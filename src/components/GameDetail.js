@@ -30,7 +30,6 @@ const GameDetail = (props) => {
         setShowLoginModal(true);
     }
     const closeLoginModal =  () =>{
-        console.log("from close login modal " + localStorage.getItem("isLoggedIn"))
         setShowLoginModal(false);
     }
     
@@ -45,7 +44,7 @@ const GameDetail = (props) => {
 
     useEffect(() => {
         if (selectedGameId !== "" && show === true) {
-          	setLoading(true); 
+			setLoading(true); 
           	const getDevs = () => {
 				const url = sessionStorage.getItem("url") + "games.php";
 				const jsonData = { gameId: selectedGameId };
@@ -60,7 +59,6 @@ const GameDetail = (props) => {
 				})
 				.catch((err) => {
 					alert("There was an error occurred: " + err);
-					console.log(" cardview get devs There was an error occurred: " + err);
 				});
           	};
 
@@ -101,7 +99,9 @@ const GameDetail = (props) => {
 			};
     
           	Promise.all([getDevs(), selectGame(), getImage()]).then(() => {
-            	setLoading(false);
+            	setTimeout(() => {
+					setLoading(false);
+				}, 850);
          	});
         }
       }, [selectedGameId, show]);

@@ -62,6 +62,7 @@ const AdminLogin = (props) => {
         })
     }
     function handleHide(){
+        setShowAlert(false);
         setAdminId("");
         setPassword("");
         onHide()

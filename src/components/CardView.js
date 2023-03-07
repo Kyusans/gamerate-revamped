@@ -13,15 +13,11 @@ const CardView = () => {
     setGameId(id)
     setShowGameDetailModal(true);
   }
-  const handleGameDetailModal = (num) =>{
-    openGameDetailModal(num);
-  }
   const closeGameDetailModal =  () =>{
     setGameId("")
     setShowGameDetailModal(false);
   }
   const [game, setGame] = useState([]);
-
 
   const getGames = async () => {
     const url = sessionStorage.getItem("url") + "games.php";
@@ -49,7 +45,7 @@ const CardView = () => {
             game.map((games, index) => (
               <Col key={index} md={3} xs={6}>
                 <CardGroup className="justify-content-center">
-                  <Card onClick={() => handleGameDetailModal(games.game_id)} className="mb-5 d-flex flex-column" style={{ border: '2px solid black' }}>
+                  <Card onClick={() => openGameDetailModal(games.game_id)} className="mb-5 d-flex flex-column" style={{ border: '2px solid black' }}>
                     <Card.Img
                       className="mx-auto icon-image"
                       variant="top"

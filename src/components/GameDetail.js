@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Container, Button, Card, ListGroup, Image, Carousel, Modal } from "react-bootstrap";
+import { Container, Button, Card, ListGroup, Image, Carousel, Modal, Spinner } from "react-bootstrap";
 import RateGame from "./RateGame";
 import "./css/site.css"
 import Login from "./Login";
@@ -14,6 +14,7 @@ const GameDetail = (props) => {
     const [gameIcon, setGameIcon] = useState("");
     const [image, setImage] = useState([]);
     const [dev, setDev] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     // Modal
     const [showRateModal, setShowRateModal] = useState(false);
@@ -43,65 +44,67 @@ const GameDetail = (props) => {
     }
 
     useEffect(() => {
-        console.log("isLoggedin: " + localStorage.getItem("isLoggedIn"))
-        
-        const getDevs = async () =>{
-            const gameId = selectedGameId;
-            const url = sessionStorage.getItem("url")+ "games.php";
-            
-            const jsonData = {gameId: gameId}
-            const formData = new FormData();
-            formData.append("operation", "getDevs");
-            formData.append("json", JSON.stringify(jsonData));
-            try {
-                const res = await axios({url: url,data: formData,method: "post"})
-                if(res.data !== 0){
-                    setDev(res.data);
-                }
-            }catch(err){
-                alert("There was an error occured: " + err)
-            }
-        }
-        const selectGame = async () =>{
-            const url = sessionStorage.getItem("url") + "games.php";
-            const gameId = selectedGameId;
-            const jsonData = {gameId: gameId}
-            const formData = new FormData();
-            formData.append("operation", "selectGame");
-            formData.append("json", JSON.stringify(jsonData));
-            try{
-                const res = await axios({url: url,data: formData,method: "post"})
-                if(res.data !== 0){
-                    setGameName(res.data.game_name);
-                    setGameDescription(res.data.game_description);
-                    setGameIcon(res.data.game_icon);
-                }
-            }catch(err){
-                alert("There was an error occured: " + err)
-            }
-        }
-        const getImage = async () =>{
-            const url = sessionStorage.getItem("url")+ "games.php";
-            const gameId = selectedGameId;
-            const jsonData = {gameId: gameId}
-            const formData = new FormData();
-            formData.append("operation", "getImage");
-            formData.append("json", JSON.stringify(jsonData));
-            try {
-                const res = await axios({url: url,data: formData,method: "post"})
+        if (selectedGameId !== "" && show === true) {
+          	setLoading(true); 
+          	const getDevs = () => {
+				const url = sessionStorage.getItem("url") + "games.php";
+				const jsonData = { gameId: selectedGameId };
+				const formData = new FormData();
+				formData.append("operation", "getDevs");
+				formData.append("json", JSON.stringify(jsonData));
+				axios({ url: url, data: formData, method: "post" })
+				.then((res) => {
+					if (res.data !== 0) {
+					setDev(res.data);
+					}
+				})
+				.catch((err) => {
+					alert("There was an error occurred: " + err);
+					console.log(" cardview get devs There was an error occurred: " + err);
+				});
+          	};
 
-                if(res.data !== 0){
-                    setImage(res.data);
-                }
-            }catch(err){
-                alert("There was an error occured: " + err)
-            }
+          	const selectGame = () => {
+				const url = sessionStorage.getItem("url") + "games.php";
+				const jsonData = { gameId: selectedGameId };
+				const formData = new FormData();
+				formData.append("operation", "selectGame");
+				formData.append("json", JSON.stringify(jsonData));
+				axios({ url: url, data: formData, method: "post" })
+				.then((res) => {
+					if (res.data !== 0) {
+					setGameName(res.data.game_name);
+					setGameDescription(res.data.game_description);
+					setGameIcon(res.data.game_icon);
+					}
+				})
+				.catch((err) => {
+					alert("There was an error occurred: " + err);
+				});
+         	};
+    
+			const getImage = () => {
+				const url = sessionStorage.getItem("url") + "games.php";
+				const jsonData = { gameId: selectedGameId };
+				const formData = new FormData();
+				formData.append("operation", "getImage");
+				formData.append("json", JSON.stringify(jsonData));
+				axios({ url: url, data: formData, method: "post" })
+				.then((res) => {
+					if (res.data !== 0) {
+					setImage(res.data);
+					}
+				})
+				.catch((err) => {
+					alert("There was an error occurred: " + err);
+				});
+			};
+    
+          	Promise.all([getDevs(), selectGame(), getImage()]).then(() => {
+            	setLoading(false);
+         	});
         }
-        getDevs();
-        selectGame();
-        getImage();
-
-    }, [selectedGameId])
+      }, [selectedGameId, show]);
 
     return ( 
         <>
@@ -117,54 +120,50 @@ const GameDetail = (props) => {
                     </Container>
                 </Modal.Header>
                 <Modal.Body>
-                    
-                        <Container className="text-center mt-3" style={{ maxWidth: "600px" }}>
-
-                            <h1><b>{gameName}</b></h1><br />
-                            <Image 
-                                src={process.env.PUBLIC_URL + "/images/gameIcon/" + gameIcon}
-                                alt={gameName + "'s Icon picture"}
-                                className="minimum-height mb-4 border-1"
-                                fluid
-                            /> 
-                    </Container>
-
-                    <Card className="mt-3 card-thin" bg="success text-white" border="dark">
-                            <Card.Body>
-                                <p>{gameDescription}</p>
-                            </Card.Body>
-                    </Card>
-                    <Card className="card-thin mt-3" border="dark">
-                        <Card.Footer><h4>Developers</h4></Card.Footer>
-                            <ListGroup variant="flush">
-                                {
-                                    dev.map((devs, index) =>(
-                                        <ListGroup.Item key={index}>{devs.dev_name}</ListGroup.Item>
-                                    ))
-                                }
-                            </ListGroup>
-                    </Card>
-
-                    <Container className="mt-3 mb-5 text-center" style={{ maxWidth: "550px" }}> 
-                        <Carousel>
-                            {
-                                image.map((images, index) =>(
-                                    <Carousel.Item key={index}>
-                                        <Image 
-                                            src={process.env.PUBLIC_URL + "/images/screenshots/" + images.img_image}
-                                            className="minimum-height"
-                                            rounded
-                                            thumbnail
-                                        />   
-                                    </Carousel.Item>                     
-                                ))
-                            }
-                        </Carousel>
-                    </Container>
-                    <RateGame show={showRateModal} onHide={closeRateModal} gameId={selectedGameId} />
-                    <Login show={showLoginModal} onHide={closeLoginModal} />
+					{loading ? (<>
+							<Container className="text-center mt-5">
+								<Spinner variant="success" animation="border" />
+							</Container></>):
+                    (<>
+					<Container className="text-center mt-3" style={{ maxWidth: "600px" }}>
+						<h1><b>{gameName}</b></h1><br />
+						<Image 
+							src={process.env.PUBLIC_URL + "/images/gameIcon/" + gameIcon}
+							alt={gameName + "'s Icon picture"}
+							className="minimum-height border-1"
+							fluid
+						/> 
+					</Container>
+					<Card className="mt-3 card-thin" bg="success text-white" border="dark">
+						<Card.Body><p>{gameDescription}</p></Card.Body>
+					</Card>
+					<Card className="card-thin mt-3" border="dark">
+						<Card.Footer><h4>Developers</h4></Card.Footer>
+							<ListGroup variant="flush">
+								{dev.map((devs, index) =>(<ListGroup.Item key={index}>{devs.dev_name}</ListGroup.Item>))}
+							</ListGroup>
+					</Card>
+					<Container className="mt-3 text-center" style={{ maxWidth: "550px" }}> 
+						<Carousel>
+							{
+								image.map((images, index) =>(
+									<Carousel.Item key={index}>
+										<Image 
+											src={process.env.PUBLIC_URL + "/images/screenshots/" + images.img_image}
+											className="minimum-height"
+											rounded
+											thumbnail
+										/>   
+									</Carousel.Item>                     
+								))
+							}
+						</Carousel>
+					</Container>
+				</>)}
                 </Modal.Body>
             </Modal>
+            <RateGame show={showRateModal} onHide={closeRateModal} gameId={selectedGameId} />
+            <Login show={showLoginModal} onHide={closeLoginModal} />
         </>
     );
 }

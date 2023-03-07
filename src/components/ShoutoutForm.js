@@ -6,10 +6,12 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import AlertScript from "./AlertScript";
 import "./css/site.css"
 import Login from "./Login";
+import { useEffect } from "react";
 
 const ShoutoutForm = (props) => {
   const {show, onHide} = props;
   const [shoutOut, setShoutOut] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   //for alert
   const [showAlert, setShowAlert] = useState(false);
   const [alertVariant, setAlertVariant] = useState("");
@@ -69,6 +71,12 @@ const ShoutoutForm = (props) => {
     }
   }
 
+  useEffect(()=>{
+    if(show){
+      localStorage.getItem("isLoggedIn") === "A" ? setIsLoggedIn(true) : setIsLoggedIn(false)
+    }
+  }, [show])
+
 	function handleHide(){
     setShoutOut("");
     setShowAlert(false);
@@ -78,32 +86,43 @@ const ShoutoutForm = (props) => {
     <>
       <Modal show={show} onHide={onHide} fullscreen={true}>
         <Modal.Body>
-          <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+          <Container>
+            <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+          </Container>
           <Container fluid="md" className="centered">
             <Card className="card-thin" bg="light" border="success">
               <Card.Body className="card-body">
-                <h2 className="text-center mt-4">Shoutout</h2>   
-                <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
-                <Form className="text-center">
-                  <Form.Group>
-                  <Form.Control
-                    className="form-control textarea"
-                    as="textarea"
-                    rows={8}
-                    type="text"
-                    placeholder="message"
-                    value={shoutOut}
-                    onChange={(e) => setShoutOut(e.target.value)}
-                    autoFocus
-                    required
-                    maxLength={700}
-                  />
-                    <Form.Text className="text-muted">
-                      Please enter a message of no more than 700 characters.
-                    </Form.Text>
-                  </Form.Group>
-                  <Button className="button-large mt-3 btn-lg big-height" variant="outline-success" onClick={handleSubmit}>Submit</Button>
-                </Form>
+                {!isLoggedIn ? (<>
+                    <Container className="text-center">
+                      <h5 className="mt-4">You need to login first</h5>
+                      <Button className="button-large mt-3 btn-lg big-height" variant="outline-success" onClick={openLoginModal}>Continue</Button>
+                    </Container>
+                  </>): (<>
+                    <h2 className="text-center mt-4">Shoutout</h2>   
+                      <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
+                      <Form className="text-center">
+                        <Form.Group>
+                        <Form.Control
+                          className="form-control textarea"
+                          as="textarea"
+                          rows={8}
+                          type="text"
+                          placeholder="message"
+                          value={shoutOut}
+                          onChange={(e) => setShoutOut(e.target.value)}
+                          autoFocus
+                          required
+                          maxLength={700}
+                        />
+                          <Form.Text className="text-muted ">
+                            Enter a message of no more than 700 characters
+                          </Form.Text>
+                        </Form.Group>
+                        <Button className="button-large mt-3 btn-lg big-height" variant="outline-success" onClick={handleSubmit}>Submit</Button>
+                      </Form>
+                  </>)  
+                }
+
               </Card.Body>
             </Card>
           </Container>

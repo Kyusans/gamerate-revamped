@@ -8,7 +8,6 @@ import AlertScript from './AlertScript';
 import "./css/site.css";
 import Signup from './Signup';
 
-
 const Login = (props) => {
     const [schoolId, setSchoolId] = useState("");
     const [showInvalid, setShowInvalid] = useState(false);
@@ -88,7 +87,7 @@ const Login = (props) => {
                 getAlert("success", "Success!");
                 setShowInvalid(false);
                 setTimeout(() => {
-                    handleHide()
+                    window.location.reload();
                 }, 2000)
             }else{
                 setShowInvalid(false);
@@ -105,7 +104,9 @@ const Login = (props) => {
         <>
             <Modal show={show} onHide={onHide} fullscreen={true}>
                 <Modal.Body>
-                    <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+                    <Container className="mt-5">
+                        <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+                    </Container>
                     <Container fluid="md" className="centered">
                         <Card className="card-thin" border="success" bg="light">
                             <Card.Body className="card-body">

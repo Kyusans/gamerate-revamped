@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Button, Container, Modal, Table } from "react-bootstrap";
 
 import AlertScript from "../AlertScript";
 import "../css/site.css";
+import AdminSettings from "./AdminSettings";
 
 const AdminDashboard = (props) => {
   const {show, onHide} = props;
@@ -19,34 +22,35 @@ const AdminDashboard = (props) => {
     setAlertVariant(variantAlert);
     setAlertMessage(messageAlert);
   }
-
-  useEffect(() =>{
-    const getInactiveStudents = async () =>{
-      const url = sessionStorage.getItem("url") + "admin.php";
-      const formData = new FormData();
-      formData.append("operation", "getInactiveStudents");
-      try{
-        const res = await axios({url: url, data: formData, method:"post"})
-        if(res.data !== 0){
-          setInactiveStudents(res.data);
-        }
-      }catch(err){
-        getAlert("danger", "There was an unexpected error occured: " + err);
+  const [showAdminSettingsModal, setShowAdminSettingsModal] = useState(false);
+  const openAdminSettingsModal = () =>{
+    setShowAdminSettingsModal(true);
+  }
+  const closeAdminSettingsModal =  () =>{
+    setShowAdminSettingsModal(false);
+  }
+  const getInactiveStudents = async () =>{
+    const url = sessionStorage.getItem("url") + "admin.php";
+    const formData = new FormData();
+    formData.append("operation", "getInactiveStudents");
+    try{
+      const res = await axios({url: url, data: formData, method:"post"})
+      if(res.data !== 0){
+        setInactiveStudents(res.data);
+        getAlert("success", "Inactive students data found!");
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 1000);
+      }else{
+        getAlert("danger", "No data found!");
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 1000);
       }
+    }catch(err){
+      getAlert("danger", "There was an unexpected error occured: " + err);
     }
-    
-    if(localStorage.getItem("isAdminLoggined") !== "1"){
-      getAlert("danger", "wait! you're not admin!")
-      setTimeout(() => {
-        onHide();
-      }, 2000);
-    }else{
-      setIsLoggedIn(true);
-      getInactiveStudents();
-      const intervalId = setInterval(getInactiveStudents, 5000);
-      return () => clearInterval(intervalId);
-    }
-  },[onHide])
+  }
 
   const approveStudent = (id) =>{
     const url = sessionStorage.getItem("url") + "admin.php";
@@ -73,22 +77,50 @@ const AdminDashboard = (props) => {
     })
   }
 
+  useEffect(() =>{   
+    if(show === true){
+      const getInactiveStudents = async () =>{
+        const url = sessionStorage.getItem("url") + "admin.php";
+        const formData = new FormData();
+        formData.append("operation", "getInactiveStudents");
+        try{
+          const res = await axios({url: url, data: formData, method:"post"})
+          if(res.data !== 0){
+            setInactiveStudents(res.data);
+          }
+        }catch(err){
+          getAlert("danger", "There was an unexpected error occured: " + err);
+        }
+      }
+      setIsLoggedIn(true);
+      getInactiveStudents();
+    }
+
+  }, [show])
+
   return (
     <>
       <Modal show={show} onHide={onHide} fullscreen={true}>
+        <Modal.Header>            
+              <Container className="d-flex justify-content-between align-items-center mt-3 mb-3">
+                <Button variant="outline-danger" onClick={onHide} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /> </Button>
+                <Button variant="outline-success" onClick={getInactiveStudents}>Refresh data</Button>
+                <Button variant="outline-primary" onClick={openAdminSettingsModal}>Settings</Button>
+              </Container></Modal.Header>
         <Modal.Body>
           {!isLoggedIn ? (
             <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
           ) : (
             <>
-              <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
-              <Table bordered striped responsive variant="dark" className="mt-3 text-center w-75 margin-auto">
+              <Container className="w-50 text-center">
+                <AlertScript show={showAlert} variant={alertVariant} message={alertMessage}/>
+              </Container>
+              <Table bordered striped responsive variant="dark" className="mt-3 text-center w-50 margin-auto">
                 <thead>
                   <tr>
                     <th>School Id</th>
                     <th>Name</th>
                     <th>Course</th>
-                    <th>Nickname</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -99,21 +131,17 @@ const AdminDashboard = (props) => {
                         <td>{item.stud_schoolId}</td>
                         <td>{item.stud_name}</td>
                         <td>{item.stud_course}</td>
-                        <td>{item.stud_nickName}</td>
                         <td><Button onClick={() => approveStudent(item.stud_id)}>Approve</Button></td>
                       </tr>
                     ))
                   }
                 </tbody>
               </Table>
-              <Container className="text-center">
-                <Button>Settings</Button>
-              </Container>
           </>)}
         </Modal.Body>
       </Modal>
-</>
-
+      <AdminSettings show={showAdminSettingsModal} onHide={closeAdminSettingsModal}/>
+    </>
   );
 };
 

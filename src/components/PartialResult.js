@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Alert, Button, Container, Table } from "react-bootstrap";
+import { FaSyncAlt } from 'react-icons/fa';
+import { Alert, Button, Container, Table, Spinner } from "react-bootstrap";
 
 const PartialResult = () => {
     const [game, setGame] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [reveal, setReveal] = useState(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
     const getGames = async () => {
       const url = sessionStorage.getItem("url") + "games.php";
@@ -23,7 +25,6 @@ const PartialResult = () => {
 
       if(res.data !== 0) {
         setGame(res.data);
-        setIsLoading(false);
       }else{
         console.log(res.data);
       }
@@ -51,11 +52,17 @@ const PartialResult = () => {
     }
     function getAllFunction(){
       setIsLoading(true);
+      checkStatus();
+      getGames(); 
+    
       setTimeout(() => {
         setIsLoading(false);
-        checkStatus();
-        getGames();  
-      }, 1000);     
+        setIsButtonDisabled(true);
+      }, 1250);
+
+      setTimeout(() => {
+        setIsButtonDisabled(false);
+      }, 4000);       
     }
 
     useEffect(() => {
@@ -64,18 +71,21 @@ const PartialResult = () => {
         getGames();       
       }
       getAllFunction()
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1250);  
     }, []);
 
   return (
     <>
       <Container>
         {isLoading ? (
-          <Alert variant="success">Getting data...</Alert>
+          <Alert variant="success">Retrieving data <Spinner size="sm"/></Alert>
         ) : 
         (<>
           <Container className="d-flex justify-content-between align-items-center">
-            <h1>Partial Result</h1>
-            <Button variant="outline-success" onClick={getAllFunction}>Refresh data</Button>
+            <h1>Partial Result</h1>{isButtonDisabled ? <Button variant="outline-success" disabled><Spinner size="sm"/></Button>:
+            <Button variant="outline-success" onClick={getAllFunction}><FaSyncAlt className="mr-1" /></Button>}
           </Container>  
           <Table bordered striped responsive variant="light" className="mt-1 text-center">
             <thead>

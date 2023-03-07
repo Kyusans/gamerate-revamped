@@ -18,20 +18,20 @@ const AddNickName = (props) => {
 	}
 	const addNickName = () =>{
 		const url = sessionStorage.getItem("url") + "students.php";
-		const schoolId = sessionStorage.getItem("schoolId")
+		const schoolId = localStorage.getItem("schoolId")
 		const jsonData = {nickName: nickName, schoolId : schoolId}
 		const formData = new FormData();
 		formData.append("json", JSON.stringify(jsonData));
 		formData.append("operation", "addNickName");
-
+		console.log("json sa nickname " + JSON.stringify(jsonData))
 		axios({url: url, data: formData, method: "post"})
 		.then((res) =>{
 			if(res.data !== 0){
-				sessionStorage.setItem("nickName", nickName);
+				localStorage.setItem("nickName", nickName);
 				localStorage.setItem("isLoggedIn", "A");
 				getAlert("success", "Success!");
 				setTimeout(() => {
-					handleHide();
+					window.location.reload();
 				}, 2000);
 			}
 		})
@@ -43,7 +43,7 @@ const AddNickName = (props) => {
 	const handleSubmit = () =>{
 		if(nickName === ""){
 			getAlert("danger", "Please enter a valid nickname to proceed");
-		}else if(sessionStorage.getItem("nickName") === "0"){
+		}else if(localStorage.getItem("nickName") === "0"){
 			addNickName();
 		}else{
 			getAlert("danger", "You already have a nickname");

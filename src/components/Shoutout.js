@@ -1,20 +1,22 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Card, Row, Col, CardGroup, Container, Button } from "react-bootstrap"
+import { FaPlus, FaSyncAlt } from 'react-icons/fa';
+import { Card, Row, Col, CardGroup, Container, Button, Spinner } from "react-bootstrap"
 import ShoutoutForm from "./ShoutoutForm";
 
 
 const Shoutout = () => {
 	const [hasShoutOut, setHasShoutOut] = useState(false);
 	const [shoutOut, setShoutOut] = useState([]);
+	const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 	const [showShoutoutModal, setShowShoutoutModal] = useState(false);
-  const openShoutoutModal = () =>{
-    setShowShoutoutModal(true);
-  }
-  const closeShoutoutModal =  () =>{
-    setShowShoutoutModal(false);
-  }
+	const openShoutoutModal = () =>{
+		setShowShoutoutModal(true);
+	}
+	const closeShoutoutModal =  () =>{
+		setShowShoutoutModal(false);
+	}
 
 	const getShoutOuts = async () =>{
 		const url = sessionStorage.getItem("url")+ "shoutout.php";
@@ -35,11 +37,16 @@ const Shoutout = () => {
 	}
 
 	function handleGetShoutout(){
+		setIsButtonDisabled(true);
 		setHasShoutOut(false);
 		setTimeout(() => {
-			setHasShoutOut(true)
-			getShoutOuts()
-		}, 500);
+			setHasShoutOut(true);
+			getShoutOuts();
+		}, 750);
+
+		setTimeout(() =>{
+			setIsButtonDisabled(false);
+		},3500)
 	}
 	useEffect(() =>{
 		getShoutOuts();
@@ -50,15 +57,18 @@ const Shoutout = () => {
 			<Container className="d-flex justify-content-between align-items-center">
 				<h1>Shoutouts</h1>
 				<div className="text-end">
-					<Button variant="outline-success mb-2" onClick={openShoutoutModal}>Create Shoutout</Button>{" "}	
-					<Button variant="outline-success mb-2" onClick={handleGetShoutout}>Refresh data</Button>		
+					<Button variant="outline-success mb-2" onClick={openShoutoutModal}><FaPlus size={13}/></Button>{" "}	
+					{isButtonDisabled ? (
+						<Button variant="outline-success mb-2" disabled><Spinner size="sm"/></Button>) : (
+						<Button variant="outline-success mb-2" onClick={handleGetShoutout}><FaSyncAlt /></Button>	
+					)}	
 				</div>
 			</Container>
 			<Card bg="success" border="dark">
 				<Card.Body>
 					<Row>
 						{!hasShoutOut ? (
-							<h5 className="text-white text-center">Getting data...</h5>
+							<h5 className="text-white text-center">Retrieving data <Spinner size="sm"/></h5>
 						) : (
 							<>
 								{shoutOut.map((shoutOuts, index) => (

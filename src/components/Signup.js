@@ -26,7 +26,8 @@ const Signup = (props) => {
     }
     const closeAdminLoginModal =  () =>{
         setShowAdminLoginModal(false);
-        handleHide()
+		console.log("signup hide closeAdmin()")
+        handleHide();
     }
 	function getAlert(variantAlert, messageAlert){
 		setShowAlert(true);
@@ -35,28 +36,31 @@ const Signup = (props) => {
  	}
 
 	const signup = () => {
-	const url = sessionStorage.getItem("url") + "students.php";
-	const jsonData = {schoolId: schoolId, name: fullName, course: course, nickName: nickName}
-	const formData = new FormData();
+		const url = sessionStorage.getItem("url") + "students.php";
+		const jsonData = {schoolId: schoolId, name: fullName, course: course, nickName: nickName}
+		const formData = new FormData();
 
-	formData.append("operation", "register");
-	formData.append("json", JSON.stringify(jsonData));
+		formData.append("operation", "register");
+		formData.append("json", JSON.stringify(jsonData));
 
-	axios({
-		url: url,
-		data: formData,
-		method: "post"
-	})
+		axios({
+			url: url,
+			data: formData,
+			method: "post"
+		})
 
-	.then((res) => {
-		console.log("res ni signup: " + res.data)
-		if(res.data === -1){
-			getAlert("danger","The Id you have entered has already been registered in our system.")
-			setSchoolId("");
-		}else if(res.data !== 0){
-			getAlert("success", "Success!");
-			setTimeout(() => {handleHide()}, 2000)
-	}
+		.then((res) => {
+			console.log("res ni signup: " + res.data)
+			if(res.data === -1){
+				getAlert("danger","The Id you have entered has already been registered in our system.")
+				setSchoolId("");
+			}else if(res.data !== 0){
+				getAlert("success", "Success!");
+				setTimeout(() => {
+					console.log("signup hide signup()")
+					handleHide();
+				}, 2000)
+		}
 	})
 	.catch((err) =>{
 		getAlert("danger","There was an error occured: " + err);
@@ -96,7 +100,10 @@ const Signup = (props) => {
 					<Container className="text-end">
 						<button className="link-button small-button" onClick={openAdminLoginModal}></button>
 					</Container>
-					<Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+					<Container >
+						<Button variant="outline-danger" onClick={handleHide} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>
+					</Container>
+					
 					<Container fluid="md" className="centered">
 						<Card className="card-thin" border="success" bg="light">
 							<Card.Body className="card-body">

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Row, Col } from "react-bootstrap";
 import Rating from "react-rating-stars-component";
 import AlertScript from "./AlertScript";
 import "./css/site.css"
@@ -23,7 +23,7 @@ const RateGame = (props) => {
     }
 
     const handleRating = (value) => {
-      setStar(value);
+        setStar(value);
     };
 
     const addStar = () =>{
@@ -62,20 +62,24 @@ const RateGame = (props) => {
     }
 
     const checkStatus = async () =>{
-			const url = sessionStorage.getItem("url") + "games.php";
-			const formData = new FormData();
-			formData.append("operation", "getSettings");
-			try {
-				const res = await axios({url: url, data: formData, method: "post"});
-				const settings = res.data;
-				const status = settings.find((setting) => setting.set_key === "status");
-				if(status && status.set_value === "1"){
-					addStar();
-				}else{    
-					getAlert("danger", "Rating unavailable");
-				}
-        }catch(err) {
-          getAlert("danger","There was an unexpected error occured: ", err)
+        if(star === 0){
+            getAlert("danger", "Rate atleast 1 star");
+        }else{
+            const url = sessionStorage.getItem("url") + "games.php";
+            const formData = new FormData();
+            formData.append("operation", "getSettings");
+            try {
+                const res = await axios({url: url, data: formData, method: "post"});
+                const settings = res.data;
+                const status = settings.find((setting) => setting.set_key === "status");
+                if(status && status.set_value === "1"){
+                    addStar();
+                }else{    
+                    getAlert("danger", "Rating unavailable");
+                }
+            }catch(err) {
+                getAlert("danger","There was an unexpected error occured: ", err)
+            }
         }
     }
 
@@ -93,23 +97,19 @@ const RateGame = (props) => {
                 </Modal.Header>
 
                 <Modal.Body>               
-                    <div className="text-center">
-                        <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
-                        You can rate as many games as you want <br />
-                        You can rate a specific game only once <br />
-                        You can not update your ratings
-                        
-                        <div className="rating-container">
-                            <Rating
-                                count={5}
-                                size={50}
-                                activeColor="#ffd700"
-                                value={star}
-                                onChange={handleRating}
-                            />
+                    <Row className="text-center">
+                        <Col>
+                            <AlertScript show={showAlert} variant={alertVariant} message={alertMessage} />
+                            You can rate as many games as you want <br />
+                            You can rate a specific game only once <br />
+                            You can not update your ratings
+                        </Col>          
+                    </Row>
+                    <Row>
+                        <div className="rating-container text-center">
+                            <Rating count={5} size={50} activeColor="#ffd700" value={star} onChange={handleRating}/>
                         </div>
-                        
-                    </div>
+                    </Row>
                 </Modal.Body>
 
                 <Modal.Footer>

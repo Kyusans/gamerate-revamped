@@ -6,8 +6,8 @@ import PartialResult from "./PartialResult";
 import Shoutout from "./Shoutout";
 
 const Home = () => {
-    var url = "";
-    url = "http://www.shareatext.com/itdays/api/";
+    // url nimo naa sa steam comment
+    url = "";
     sessionStorage.setItem("url", url);
   return (
     <>

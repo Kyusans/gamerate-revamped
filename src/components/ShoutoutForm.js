@@ -81,7 +81,7 @@ const ShoutoutForm = (props) => {
 	}
   return ( 
     <>
-      <Modal show={show} onHide={onHide} fullscreen={true}>
+      <Modal show={show} onHide={onHide} fullscreen>
         <Modal.Body>
           <Container>
             <Button variant="outline-danger" onClick={() => handleHide()} style={{ width: "75px" }}><FontAwesomeIcon icon={faArrowLeft} /></Button>

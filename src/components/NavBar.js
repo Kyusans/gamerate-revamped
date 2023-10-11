@@ -47,7 +47,7 @@ function NavBar() {
   return (
     <>
       <Navbar className="nav-background" expand="lg" text="light">
-          <Navbar.Brand className="brand">IT Days 2023</Navbar.Brand>
+          <Navbar.Brand className="brand">Game Dev Expo</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav "/>
           <Navbar.Collapse className="brand" id="basic-navbar-nav">
             <NavLink style={{color: "white", marginRight: "10px"}} onClick={openAboutModal}>About</NavLink>

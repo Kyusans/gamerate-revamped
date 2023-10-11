@@ -1,38 +1,29 @@
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, ListGroup, Modal, Row, Spinner } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import RateGame from "./RateGame";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import "./../index.css";
+import '../index.css';
 
 const GameDetail = (props) => {
   const { show, onHide, selectedGameId } = props;
   const [gameName, setGameName] = useState("");
   const [gameDescription, setGameDescription] = useState("");
   const [gameIcon, setGameIcon] = useState("");
-  // const [image, setImage] = useState([]);
   const [dev, setDev] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [showRateModal, setShowRateModal] = useState(false);
-  
-  const openRateModal = () => {
-    setShowRateModal(true);
-  };
-  
-  const closeRateModal = () => {
-    handleHide();
-    setShowRateModal(false);
-  };
+  // const closeRateModal = () => {
+  //   handleHide();
+  //   setShowRateModal(false);
+  // };
 
   function handleHide() {
     setGameName("");
     setGameDescription("");
     setGameIcon("");
-    // setImage([]);
     setDev([]);
     onHide();
   }
@@ -41,7 +32,7 @@ const GameDetail = (props) => {
     if (selectedGameId !== "" && show === true) {
       setLoading(true);
       const getDevs = () => {
-        const url = localStorage.getItem("url") + "games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
         const jsonData = { gameId: selectedGameId };
         const formData = new FormData();
         formData.append("operation", "getDevs");
@@ -58,7 +49,7 @@ const GameDetail = (props) => {
       };
 
       const selectGame = () => {
-        const url = localStorage.getItem("url") + "games.php";
+        const url = sessionStorage.getItem("url") + "games.php";
         const jsonData = { gameId: selectedGameId };
         const formData = new FormData();
         formData.append("operation", "selectGame");
@@ -76,26 +67,6 @@ const GameDetail = (props) => {
         });
       };
 
-      // mga screenshot ni nila
-      // const getImage = () => {
-      //   const url = localStorage.getItem("url") + "games.php";
-      //   const jsonData = { gameId: selectedGameId };
-      //   const formData = new FormData();
-      //   formData.append("operation", "getImage");
-      //   formData.append("json", JSON.stringify(jsonData));
-      //   axios({ url: url, data: formData, method: "post" })
-      //   .then((res) => {
-      //     if (res.data !== 0) {
-      //       setImage(res.data);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     alert("There was an error occurred: " + err);
-      //   });
-      // };
-
-
-      // eh butang ni sa promis.all getImage() if naay screenshot sa ilang dula
       Promise.all([getDevs(), selectGame()]).then(() => {
         setTimeout(() => {
           setLoading(false);
@@ -116,7 +87,6 @@ const GameDetail = (props) => {
             >
               <FontAwesomeIcon icon={faArrowLeft} />{" "}
             </Button>
-            {/* <Button variant="outline-success" onClick={openRateModal}>Rate Game</Button> */}
           </Container>
         </Modal.Header>
         <Modal.Body>
@@ -131,7 +101,7 @@ const GameDetail = (props) => {
               <Container className="text-center">
                 <h1><b>{gameName}</b></h1><br />
                 <Row>
-                  <Col>
+                  <Col xs={12} sm={6} className="mb-3">
                     <LazyLoadImage
                     src={process.env.PUBLIC_URL + "/images/gameIcon/" + gameIcon}
                     alt={gameName + "'s Icon picture"}
@@ -139,7 +109,7 @@ const GameDetail = (props) => {
                     effect="blur"
                   />
                   </Col>
-                  <Col>
+                  <Col xs={12} sm={6}>
                     <Card className="text-white" bg="dark" border="dark">
                       <Card.Body><p>{gameDescription}</p></Card.Body>
                     </Card>
@@ -152,28 +122,10 @@ const GameDetail = (props) => {
                   </Col>
                 </Row>
               </Container>
-              {/* <Container className="mt-3 text-center" style={{ maxWidth: "550px" }}>
-                <Carousel>
-                  {
-                    image.map((images, index) =>(
-                      <Carousel.Item key={index}>
-                        <LazyLoadImage
-                          src={process.env.PUBLIC_URL + "/images/screenshots/" + images.img_image}
-                          className="minimum-height"
-                          rounded
-                          thumbnail
-                          effect="blur" // Apply a blur effect
-                        />
-                      </Carousel.Item>                     
-                    ))
-                  } 
-                </Carousel>
-              </Container> */}
             </>
           )}
         </Modal.Body>
       </Modal>
-      <RateGame show={showRateModal} onHide={closeRateModal} gameId={selectedGameId} />
     </>
   );
 }

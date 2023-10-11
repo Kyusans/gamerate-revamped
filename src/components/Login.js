@@ -19,9 +19,9 @@ const Login = (props) => {
 
     // Modal
     const [showNickNameModal, setShowNickNameModal] = useState(false);
-    const openNickNameModal = () =>{
-        setShowNickNameModal(true);
-    }
+    // const openNickNameModal = () =>{
+    //     setShowNickNameModal(true);
+    // }
     const closeNickNameModal =  () =>{
         setShowNickNameModal(false);
         handleHide()
@@ -68,14 +68,6 @@ const Login = (props) => {
         .then((res) => {
             if(res.data.stud_active === "0"){
                 getAlert("danger","Your account is pending approval")
-            }else if(res.data.stud_nickName === ""){
-                localStorage.setItem("schoolId", res.data.stud_schoolId);
-                localStorage.setItem("nickName", "0");
-                getAlert("success", "Success");
-                setShowInvalid(false);
-                setTimeout(() => {
-                    openNickNameModal();
-                }, 2000)
             }else if(res.data !== 0){
                 localStorage.setItem("schoolId", res.data.stud_schoolId);
                 localStorage.setItem("nickName", res.data.stud_nickName);

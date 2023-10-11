@@ -11,7 +11,6 @@ const Signup = (props) => {
 	const {show, onHide} = props;
 	const [schoolId, setSchoolId] = useState("");
 	const [fullName, setFullName] = useState("");
-	const [nickName, setNickName] = useState("");
 	const [course, setCourse] = useState("");
 	const [validated, setValidated] = useState(false);
 	//for alert
@@ -36,7 +35,7 @@ const Signup = (props) => {
 
 	const signup = () => {
 		const url = sessionStorage.getItem("url") + "students.php";
-		const jsonData = {schoolId: schoolId, name: fullName, course: course, nickName: nickName}
+		const jsonData = {schoolId: schoolId, name: fullName, course: course}
 		const formData = new FormData();
 
 		formData.append("operation", "register");
@@ -82,7 +81,6 @@ const Signup = (props) => {
 	function handleHide(){
 		setSchoolId("");
 		setFullName("");
-		setNickName("");
 		setCourse("");
 		setValidated(false);
 		setShowAlert(false);
@@ -137,6 +135,8 @@ const Signup = (props) => {
 												This field is required
 											</Form.Control.Feedback>
 										</FloatingLabel>
+										
+										<Form.Label className="text-secondary">{"example: 1234-1234-1234"}</Form.Label>
 									</Form.Group>
 
 									<Form.Group>
@@ -154,23 +154,6 @@ const Signup = (props) => {
 											</Form.Control.Feedback>
 										</FloatingLabel>
 									</Form.Group>
-
-									<Form.Group>
-										<FloatingLabel className="fatter-text mt-3 centered-label" label="Nickname">
-											<Form.Control
-													className="form-control"
-													type="text"
-													placeholder="Nickname"
-													value={nickName}
-													onChange={(e) => setNickName(e.target.value)}
-													required
-											/>
-											<Form.Control.Feedback type="invalid">
-												This field is required
-											</Form.Control.Feedback>
-										</FloatingLabel>
-									</Form.Group>
-									
 									<Button type="submit" variant="outline-success" className="button-large mt-4 btn-lg big-height"><div className="text-small">Submit</div></Button>
 								</Form>
 							</Card.Body>

@@ -19,7 +19,7 @@ const Shoutout = () => {
 	}
 
 	const getShoutOuts = async () =>{
-		const url = sessionStorage.getItem("url")+ "shoutout.php";
+		const url = localStorage.getItem("url")+ "shoutout.php";
 		const jsonData = {limit: 2}
 		const formData = new FormData();
 		formData.append("operation", "getShoutOuts");
@@ -54,7 +54,7 @@ const Shoutout = () => {
 
 	return ( 
 		<>
-			<Container className="d-flex justify-content-between align-items-center">
+			<Container className="d-flex justify-content-between align-items-center mt-3">
 				<h1>Shoutouts</h1>
 				<div className="text-end">
 					<Button variant="outline-success mb-2" onClick={openShoutoutModal}><FaPlus size={13}/></Button>{" "}	
@@ -79,7 +79,6 @@ const Shoutout = () => {
 													<Card.Text>
 														<i>{"'" + shoutOuts.sh_shoutout + "'"}</i>
 													</Card.Text>
-													<Card.Subtitle>{"-" + shoutOuts.sh_nickName}</Card.Subtitle>
 												</Card.Body>
 											</Card>
 										</CardGroup>

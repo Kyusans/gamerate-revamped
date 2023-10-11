@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { Card, Col, Container, Row, CardGroup } from "react-bootstrap";
-import "./css/site.css";
+import { useEffect, useState } from "react";
+import { Card, CardGroup, Col, Container, Row } from "react-bootstrap";
 import GameDetail from "./GameDetail";
 
 const CardView = () => {
@@ -16,11 +15,12 @@ const CardView = () => {
   const closeGameDetailModal =  () =>{
     setGameId("")
     setShowGameDetailModal(false);
+    // getGames();
   }
   const [game, setGame] = useState([]);
 
   const getGames = async () => {
-    const url = sessionStorage.getItem("url") + "games.php";
+    const url = localStorage.getItem("url") + "games.php";
     const formData = new FormData();
     formData.append("operation", "getGames");
     try{
@@ -36,33 +36,32 @@ const CardView = () => {
   useEffect(() => {
     getGames();
   }, []);
-
-  return (
+  return ( 
     <>
-      <Container className="text-center">
-        <Row>
-          {Array.isArray(game) &&
-            game.map((games, index) => (
-              <Col key={index} md={3} xs={6}>
-                <CardGroup className="justify-content-center">
-                  <Card onClick={() => openGameDetailModal(games.game_id)} className="mb-5 d-flex flex-column" style={{ border: '2px solid black' }}>
-                    <Card.Img
-                      className="mx-auto icon-image"
-                      variant="top"
-                      src={
-                        process.env.PUBLIC_URL +
-                        "/images/gameIcon/" +
-                        games.game_icon
-                      } />
-                  </Card>
-                </CardGroup>
-              </Col>
-            ))}
-        </Row>
+      <Container className="text-center mt-5">
+            <Row>
+              {Array.isArray(game) &&
+                game.map((games, index) => (
+                  <Col key={index} md={3} xs={6}>
+                    <CardGroup className="justify-content-center">
+                      <Card onClick={() => openGameDetailModal(games.game_id)} className="mb-5 d-flex flex-column" style={{ border: '2px solid black' }}>
+                        <Card.Img
+                          className="mx-auto icon-image"
+                          variant="top"
+                          src={
+                            process.env.PUBLIC_URL +
+                            "/images/gameIcon/" +
+                            games.game_icon
+                          } />
+                      </Card>
+                    </CardGroup>
+                  </Col>
+                ))}
+            </Row>
       </Container>
       <GameDetail show={showGameDetailModal} onHide={closeGameDetailModal} selectedGameId={gameId}/>
     </>
   );
-};
-
+}
+ 
 export default CardView;

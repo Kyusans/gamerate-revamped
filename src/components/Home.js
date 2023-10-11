@@ -1,20 +1,18 @@
 import { Container } from "react-bootstrap";
-
 import CardView from "./CardView";
-
-import PartialResult from "./PartialResult";
+// import PartialResult from "./PartialResult";
 import Shoutout from "./Shoutout";
 
 const Home = () => {
-    // url nimo naa sa steam comment
-    url = "";
-    sessionStorage.setItem("url", url);
+  if(localStorage.getItem("url") !== "http://localhost/gamedev/api/"){
+    localStorage.setItem("url", "http://localhost/gamedev/api/");
+  }
   return (
     <>
-      <Container className="mt-4">
+      {/* <Container className="mt-4">
         <PartialResult />
         <hr />
-      </Container>
+      </Container> */}
 
       <Container>
         <Shoutout />

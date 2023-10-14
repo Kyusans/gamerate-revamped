@@ -4,8 +4,8 @@ import CardView from "./CardView";
 import Shoutout from "./Shoutout";
 
 const Home = () => {
-  if(sessionStorage.getItem("url") !== "http://localhost/gamedev/api/"){
-    sessionStorage.setItem("url", "http://localhost/gamedev/api/");
+  if(sessionStorage.getItem("url") !== "http://www.shareatext.com/itdays/api/"){
+    sessionStorage.setItem("url", "http://www.shareatext.com/itdays/api/");
   }
   return (
     <>

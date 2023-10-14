@@ -66,8 +66,8 @@ const Login = (props) => {
         })
 
         .then((res) => {
-            if(res.data.stud_active === "0"){
-                getAlert("danger","Your account is pending approval")
+            if(res.data.stud_active === 0){
+                getAlert("danger","Your account is pending approval og make sure nga naay dash kada number ha")
             }else if(res.data !== 0){
                 localStorage.setItem("schoolId", res.data.stud_schoolId);
                 localStorage.setItem("nickName", res.data.stud_nickName);
